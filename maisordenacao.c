@@ -9,39 +9,40 @@
 #include "vetores.h"
 
 // Protótipo da função de ordenação, permitindo passar diferentes algoritmos como parâmetro
-typedef void (*AlgOrdenacao)(int *, int); 
+typedef void (*AlgOrdenacao)(int *, int);
 
 // Funções auxiliares para execução de algoritmos específicos
 void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho);
 void quicksort_wrapper(int *vetor, int tamanho);
 void shellsort_wrapper(int *vetor, int tamanho);
 void mergesort_wrapper(int *vetor, int tamanho);
-void rearranjar_heap(int v[], int i, int tamanho_do_heap);
+int *rearranjar_heap(int v[], int i, int tamanho_do_heap);
 void construir_heap(int v[], int n);
-void merge(int v[], int inf, int meio, int sup);
-int obter_maior(int v[], int n);
-void contar_classificar(int v[], int n, int exp);
- 
+int *merge(int v[], int inf, int meio, int sup);
+int obter_maior(int v[], int n, int* eficiencia);
+int* contar_classificar(int v[], int n, int exp);
+
 // Declaração dos algoritmos de ordenação implementados
 void bubblesort(int v[], int n);
 void selection_sort(int num[], int tam);
 void insertion_sort(int v[], int n);
 void shellsort(int v[], int n, int incrementos[], int numinc);
-void quicksort(int v[], int inf, int sup);
-void heapsort(int v[], int n);
-void mergesort(int v[], int inf, int sup);
-void contagem_de_menores(int v[], int n);
-void radixsort(int v[], int n);
+int *quicksort(int v[], int inf, int sup);
+int *heapsort(int v[], int n);
+int *mergesort(int v[], int inf, int sup);
+int *contagem_de_menores(int v[], int n);
+int *radixsort(int v[], int n);
 
-int main(void){
+int main(void)
+{
 
     // Variáveis para configurar os testes
-    int id_ordenacao;  // Identifica o algoritmo de ordenação
-    int tam_vetor;     // Tamanho do vetor a ser ordenado
-    int padrao_vetor;  // Tipo de vetor (ordenado, inverso ou aleatório)
+    int id_ordenacao;       // Identifica o algoritmo de ordenação
+    int tam_vetor;          // Tamanho do vetor a ser ordenado
+    int padrao_vetor;       // Tipo de vetor (ordenado, inverso ou aleatório)
     int id_vetor_aleatorio; // Identifica o vetor aleatório específico (1..5)
 
-    clock_t inicio, fim;  // Para medir o tempo de execução
+    clock_t inicio, fim;    // Para medir o tempo de execução
     double tempo_ordenacao; // Armazena o tempo gasto na ordenação
 
     // Menu interativo para o usuário escolher o algoritmo e as condições de teste
@@ -69,296 +70,306 @@ int main(void){
     }
 
     /*
-    * O bloco de código abaixo utiliza um switch para determinar qual algoritmo de ordenação será executado,
-    * com base na escolha do usuário (armazenada na variável 'id_ordenacao'). Ele também considera o tamanho 
-    * do vetor a ser ordenado (armazenado em 'tam_vetor') e o padrão dos elementos no vetor (armazenado em 'padrao_vetor').
-    *
-    * Funcionalidades principais:
-    * 1. Determina o algoritmo de ordenação a ser utilizado:
-    *    - BubbleSort, SelectionSort, InsertionSort, ShellSort, QuickSort, HeapSort, MergeSort,
-    *      Contagem de Menores ou RadixSort.
-    *
-    * 2. Para cada algoritmo, verifica o tamanho do vetor (100, 1.000, 10.000 ou 100.000 elementos).
-    *
-    * 3. Em seguida, adapta a execução com base no padrão do vetor:
-    *    - Ordenado: elementos já em ordem crescente.
-    *    - Inversamente Ordenado: elementos em ordem decrescente.
-    *    - Aleatório: elementos dispostos de forma randômica (com 5 versões disponíveis para cada tamanho).
-    *
-    * 4. Finalmente, chama a função 'executar_ordenacao', que encapsula:
-    *    - A execução do algoritmo escolhido.
-    *    - A medição do tempo de execução.
-    *    - A exibição dos resultados antes e depois da ordenação.
-    *
-    * A estrutura utiliza nested switches (switch aninhados) para organizar as opções:
-    * - O primeiro switch identifica o algoritmo de ordenação (com base em 'id_ordenacao').
-    * - O segundo switch, dentro de cada case, avalia o tamanho do vetor (com base em 'tam_vetor').
-    * - Estruturas condicionais ('if' e 'else if') verificam o padrão do vetor e selecionam a versão apropriada.
-    */
+     * O bloco de código abaixo utiliza um switch para determinar qual algoritmo de ordenação será executado,
+     * com base na escolha do usuário (armazenada na variável 'id_ordenacao'). Ele também considera o tamanho
+     * do vetor a ser ordenado (armazenado em 'tam_vetor') e o padrão dos elementos no vetor (armazenado em 'padrao_vetor').
+     *
+     * Funcionalidades principais:
+     * 1. Determina o algoritmo de ordenação a ser utilizado:
+     *    - BubbleSort, SelectionSort, InsertionSort, ShellSort, QuickSort, HeapSort, MergeSort,
+     *      Contagem de Menores ou RadixSort.
+     *
+     * 2. Para cada algoritmo, verifica o tamanho do vetor (100, 1.000, 10.000 ou 100.000 elementos).
+     *
+     * 3. Em seguida, adapta a execução com base no padrão do vetor:
+     *    - Ordenado: elementos já em ordem crescente.
+     *    - Inversamente Ordenado: elementos em ordem decrescente.
+     *    - Aleatório: elementos dispostos de forma randômica (com 5 versões disponíveis para cada tamanho).
+     *
+     * 4. Finalmente, chama a função 'executar_ordenacao', que encapsula:
+     *    - A execução do algoritmo escolhido.
+     *    - A medição do tempo de execução.
+     *    - A exibição dos resultados antes e depois da ordenação.
+     *
+     * A estrutura utiliza nested switches (switch aninhados) para organizar as opções:
+     * - O primeiro switch identifica o algoritmo de ordenação (com base em 'id_ordenacao').
+     * - O segundo switch, dentro de cada case, avalia o tamanho do vetor (com base em 'tam_vetor').
+     * - Estruturas condicionais ('if' e 'else if') verificam o padrão do vetor e selecionam a versão apropriada.
+     */
 
-    switch (id_ordenacao) {
+    switch (id_ordenacao)
+    {
     case 0: // BubbleSort
-        switch (tam_vetor) {
-            case 100:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(bubblesort, vetor_100_ordenado, 100);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(bubblesort, vetor_100_inverso, 100);
-                else
-                    executar_ordenacao(bubblesort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
-                break;
-            case 1000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(bubblesort, vetor_1000_ordenado, 1000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(bubblesort, vetor_1000_inverso, 1000);
-                else
-                    executar_ordenacao(bubblesort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
-                break;
-            case 10000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(bubblesort, vetor_10000_ordenado, 10000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(bubblesort, vetor_10000_inverso, 10000);
-                else
-                    executar_ordenacao(bubblesort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
-                break;
-            case 100000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(bubblesort, vetor_100000_ordenado, 100000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(bubblesort, vetor_100000_inverso, 100000);
-                else
-                    executar_ordenacao(bubblesort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
-                break;
+        switch (tam_vetor)
+        {
+        case 100:
+            if (padrao_vetor == 1)
+                executar_ordenacao(bubblesort, vetor_100_ordenado, 100);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(bubblesort, vetor_100_inverso, 100);
+            else
+                executar_ordenacao(bubblesort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+            break;
+        case 1000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(bubblesort, vetor_1000_ordenado, 1000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(bubblesort, vetor_1000_inverso, 1000);
+            else
+                executar_ordenacao(bubblesort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+            break;
+        case 10000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(bubblesort, vetor_10000_ordenado, 10000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(bubblesort, vetor_10000_inverso, 10000);
+            else
+                executar_ordenacao(bubblesort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+            break;
+        case 100000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(bubblesort, vetor_100000_ordenado, 100000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(bubblesort, vetor_100000_inverso, 100000);
+            else
+                executar_ordenacao(bubblesort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+            break;
         }
         break;
 
     case 1: // SelectionSort
-        switch (tam_vetor) {
-            case 100:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(selection_sort, vetor_100_ordenado, 100);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(selection_sort, vetor_100_inverso, 100);
-                else
-                    executar_ordenacao(selection_sort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
-                break;
-            case 1000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(selection_sort, vetor_1000_ordenado, 1000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(selection_sort, vetor_1000_inverso, 1000);
-                else
-                    executar_ordenacao(selection_sort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
-                break;
-            case 10000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(selection_sort, vetor_10000_ordenado, 10000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(selection_sort, vetor_10000_inverso, 10000);
-                else
-                    executar_ordenacao(selection_sort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
-                break;
-            case 100000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(selection_sort, vetor_100000_ordenado, 100000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(selection_sort, vetor_100000_inverso, 100000);
-                else
-                    executar_ordenacao(selection_sort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
-                break;
+        switch (tam_vetor)
+        {
+        case 100:
+            if (padrao_vetor == 1)
+                executar_ordenacao(selection_sort, vetor_100_ordenado, 100);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(selection_sort, vetor_100_inverso, 100);
+            else
+                executar_ordenacao(selection_sort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+            break;
+        case 1000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(selection_sort, vetor_1000_ordenado, 1000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(selection_sort, vetor_1000_inverso, 1000);
+            else
+                executar_ordenacao(selection_sort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+            break;
+        case 10000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(selection_sort, vetor_10000_ordenado, 10000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(selection_sort, vetor_10000_inverso, 10000);
+            else
+                executar_ordenacao(selection_sort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+            break;
+        case 100000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(selection_sort, vetor_100000_ordenado, 100000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(selection_sort, vetor_100000_inverso, 100000);
+            else
+                executar_ordenacao(selection_sort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+            break;
         }
         break;
 
     case 2: // InsertionSort
-        switch (tam_vetor) {
-            case 100:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(insertion_sort, vetor_100_ordenado, 100);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(insertion_sort, vetor_100_inverso, 100);
-                else
-                    executar_ordenacao(insertion_sort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
-                break;
-            case 1000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(insertion_sort, vetor_1000_ordenado, 1000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(insertion_sort, vetor_1000_inverso, 1000);
-                else
-                    executar_ordenacao(insertion_sort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
-                break;
-            case 10000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(insertion_sort, vetor_10000_ordenado, 10000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(insertion_sort, vetor_10000_inverso, 10000);
-                else
-                    executar_ordenacao(insertion_sort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
-                break;
-            case 100000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(insertion_sort, vetor_100000_ordenado, 100000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(insertion_sort, vetor_100000_inverso, 100000);
-                else
-                    executar_ordenacao(insertion_sort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
-                break;
+        switch (tam_vetor)
+        {
+        case 100:
+            if (padrao_vetor == 1)
+                executar_ordenacao(insertion_sort, vetor_100_ordenado, 100);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(insertion_sort, vetor_100_inverso, 100);
+            else
+                executar_ordenacao(insertion_sort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+            break;
+        case 1000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(insertion_sort, vetor_1000_ordenado, 1000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(insertion_sort, vetor_1000_inverso, 1000);
+            else
+                executar_ordenacao(insertion_sort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+            break;
+        case 10000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(insertion_sort, vetor_10000_ordenado, 10000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(insertion_sort, vetor_10000_inverso, 10000);
+            else
+                executar_ordenacao(insertion_sort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+            break;
+        case 100000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(insertion_sort, vetor_100000_ordenado, 100000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(insertion_sort, vetor_100000_inverso, 100000);
+            else
+                executar_ordenacao(insertion_sort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+            break;
         }
         break;
 
     case 3: // ShellSort
-        switch (tam_vetor) {
-            case 100:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(shellsort_wrapper, vetor_100_ordenado, 100);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(shellsort_wrapper, vetor_100_inverso, 100);
-                else
-                    executar_ordenacao(shellsort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
-                break;
-            case 1000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(shellsort_wrapper, vetor_1000_ordenado, 1000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(shellsort_wrapper, vetor_1000_inverso, 1000);
-                else
-                    executar_ordenacao(shellsort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
-                break;
-            case 10000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(shellsort_wrapper, vetor_10000_ordenado, 10000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(shellsort_wrapper, vetor_10000_inverso, 10000);
-                else
-                    executar_ordenacao(shellsort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
-                break;
-            case 100000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(shellsort_wrapper, vetor_100000_ordenado, 100000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(shellsort_wrapper, vetor_100000_inverso, 100000);
-                else
-                    executar_ordenacao(shellsort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
-                break;
+        switch (tam_vetor)
+        {
+        case 100:
+            if (padrao_vetor == 1)
+                executar_ordenacao(shellsort_wrapper, vetor_100_ordenado, 100);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(shellsort_wrapper, vetor_100_inverso, 100);
+            else
+                executar_ordenacao(shellsort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+            break;
+        case 1000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(shellsort_wrapper, vetor_1000_ordenado, 1000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(shellsort_wrapper, vetor_1000_inverso, 1000);
+            else
+                executar_ordenacao(shellsort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+            break;
+        case 10000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(shellsort_wrapper, vetor_10000_ordenado, 10000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(shellsort_wrapper, vetor_10000_inverso, 10000);
+            else
+                executar_ordenacao(shellsort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+            break;
+        case 100000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(shellsort_wrapper, vetor_100000_ordenado, 100000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(shellsort_wrapper, vetor_100000_inverso, 100000);
+            else
+                executar_ordenacao(shellsort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+            break;
         }
         break;
 
     case 4: // QuickSort
-        switch (tam_vetor) {
-            case 100:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(quicksort_wrapper, vetor_100_ordenado, 100);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(quicksort_wrapper, vetor_100_inverso, 100);
-                else
-                    executar_ordenacao(quicksort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
-                break;
-            case 1000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(quicksort_wrapper, vetor_1000_ordenado, 1000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(quicksort_wrapper, vetor_1000_inverso, 1000);
-                else
-                    executar_ordenacao(quicksort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
-                break;
-            case 10000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(quicksort_wrapper, vetor_10000_ordenado, 10000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(quicksort_wrapper, vetor_10000_inverso, 10000);
-                else
-                    executar_ordenacao(quicksort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
-                break;
-            case 100000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(quicksort_wrapper, vetor_100000_ordenado, 100000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(quicksort_wrapper, vetor_100000_inverso, 100000);
-                else
-                    executar_ordenacao(quicksort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
-                break;
+        switch (tam_vetor)
+        {
+        case 100:
+            if (padrao_vetor == 1)
+                executar_ordenacao(quicksort_wrapper, vetor_100_ordenado, 100);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(quicksort_wrapper, vetor_100_inverso, 100);
+            else
+                executar_ordenacao(quicksort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+            break;
+        case 1000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(quicksort_wrapper, vetor_1000_ordenado, 1000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(quicksort_wrapper, vetor_1000_inverso, 1000);
+            else
+                executar_ordenacao(quicksort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+            break;
+        case 10000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(quicksort_wrapper, vetor_10000_ordenado, 10000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(quicksort_wrapper, vetor_10000_inverso, 10000);
+            else
+                executar_ordenacao(quicksort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+            break;
+        case 100000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(quicksort_wrapper, vetor_100000_ordenado, 100000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(quicksort_wrapper, vetor_100000_inverso, 100000);
+            else
+                executar_ordenacao(quicksort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+            break;
         }
         break;
 
     case 5: // HeapSort
-        switch (tam_vetor) {
-            case 100:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(heapsort, vetor_100_ordenado, 100);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(heapsort, vetor_100_inverso, 100);
-                else
-                    executar_ordenacao(heapsort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
-                break;
-            case 1000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(heapsort, vetor_1000_ordenado, 1000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(heapsort, vetor_1000_inverso, 1000);
-                else
-                    executar_ordenacao(heapsort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
-                break;
-            case 10000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(heapsort, vetor_10000_ordenado, 10000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(heapsort, vetor_10000_inverso, 10000);
-                else
-                    executar_ordenacao(heapsort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
-                break;
-            case 100000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(heapsort, vetor_100000_ordenado, 100000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(heapsort, vetor_100000_inverso, 100000);
-                else
-                    executar_ordenacao(heapsort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
-                break;
+        switch (tam_vetor)
+        {
+        case 100:
+            if (padrao_vetor == 1)
+                executar_ordenacao(heapsort, vetor_100_ordenado, 100);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(heapsort, vetor_100_inverso, 100);
+            else
+                executar_ordenacao(heapsort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+            break;
+        case 1000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(heapsort, vetor_1000_ordenado, 1000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(heapsort, vetor_1000_inverso, 1000);
+            else
+                executar_ordenacao(heapsort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+            break;
+        case 10000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(heapsort, vetor_10000_ordenado, 10000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(heapsort, vetor_10000_inverso, 10000);
+            else
+                executar_ordenacao(heapsort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+            break;
+        case 100000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(heapsort, vetor_100000_ordenado, 100000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(heapsort, vetor_100000_inverso, 100000);
+            else
+                executar_ordenacao(heapsort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+            break;
         }
         break;
 
     case 6: // MergeSort
-        switch (tam_vetor) {
-            case 100:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(mergesort_wrapper, vetor_100_ordenado, 100);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(mergesort_wrapper, vetor_100_inverso, 100);
-                else
-                    executar_ordenacao(mergesort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
-                break;
-            case 1000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(mergesort_wrapper, vetor_1000_ordenado, 1000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(mergesort_wrapper, vetor_1000_inverso, 1000);
-                else
-                    executar_ordenacao(mergesort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
-                break;
-            case 10000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(mergesort_wrapper, vetor_10000_ordenado, 10000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(mergesort_wrapper, vetor_10000_inverso, 10000);
-                else
-                    executar_ordenacao(mergesort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
-                break;
-            case 100000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(mergesort_wrapper, vetor_100000_ordenado, 100000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(mergesort_wrapper, vetor_100000_inverso, 100000);
-                else
-                    executar_ordenacao(mergesort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
-                break;
+        switch (tam_vetor)
+        {
+        case 100:
+            if (padrao_vetor == 1)
+                executar_ordenacao(mergesort_wrapper, vetor_100_ordenado, 100);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(mergesort_wrapper, vetor_100_inverso, 100);
+            else
+                executar_ordenacao(mergesort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+            break;
+        case 1000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(mergesort_wrapper, vetor_1000_ordenado, 1000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(mergesort_wrapper, vetor_1000_inverso, 1000);
+            else
+                executar_ordenacao(mergesort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+            break;
+        case 10000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(mergesort_wrapper, vetor_10000_ordenado, 10000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(mergesort_wrapper, vetor_10000_inverso, 10000);
+            else
+                executar_ordenacao(mergesort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+            break;
+        case 100000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(mergesort_wrapper, vetor_100000_ordenado, 100000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(mergesort_wrapper, vetor_100000_inverso, 100000);
+            else
+                executar_ordenacao(mergesort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+            break;
         }
         break;
 
     case 7: // Contagem de Menores
-        switch (tam_vetor) {
-            switch (tam_vetor) {
+        switch (tam_vetor)
+        {
+            switch (tam_vetor)
+            {
             case 100:
                 if (padrao_vetor == 1)
                     executar_ordenacao(contagem_de_menores, vetor_100_ordenado, 100);
@@ -396,41 +407,42 @@ int main(void){
         break;
 
     case 8: // RadixSort
-        switch (tam_vetor) {
-            case 100:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(radixsort, vetor_100_ordenado, 100);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(radixsort, vetor_100_inverso, 100);
-                else
-                    executar_ordenacao(radixsort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
-                break;
-            case 1000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(radixsort, vetor_1000_ordenado, 1000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(radixsort, vetor_1000_inverso, 1000);
-                else
-                    executar_ordenacao(radixsort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
-                break;
-            case 10000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(radixsort, vetor_10000_ordenado, 10000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(radixsort, vetor_10000_inverso, 10000);
-                else
-                    executar_ordenacao(radixsort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
-                break;
-            case 100000:
-                if (padrao_vetor == 1)
-                    executar_ordenacao(radixsort, vetor_100000_ordenado, 100000);
-                else if (padrao_vetor == 2)
-                    executar_ordenacao(radixsort, vetor_100000_inverso, 100000);
-                else
-                    executar_ordenacao(radixsort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
-                break;
+        switch (tam_vetor)
+        {
+        case 100:
+            if (padrao_vetor == 1)
+                executar_ordenacao(radixsort, vetor_100_ordenado, 100);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(radixsort, vetor_100_inverso, 100);
+            else
+                executar_ordenacao(radixsort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+            break;
+        case 1000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(radixsort, vetor_1000_ordenado, 1000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(radixsort, vetor_1000_inverso, 1000);
+            else
+                executar_ordenacao(radixsort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+            break;
+        case 10000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(radixsort, vetor_10000_ordenado, 10000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(radixsort, vetor_10000_inverso, 10000);
+            else
+                executar_ordenacao(radixsort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+            break;
+        case 100000:
+            if (padrao_vetor == 1)
+                executar_ordenacao(radixsort, vetor_100000_ordenado, 100000);
+            else if (padrao_vetor == 2)
+                executar_ordenacao(radixsort, vetor_100000_inverso, 100000);
+            else
+                executar_ordenacao(radixsort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+            break;
         }
-    break;
+        break;
 
     default:
         printf("Algoritmo de ordenação não identificado.\n");
@@ -440,59 +452,54 @@ int main(void){
     return 0;
 }
 
-void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho) {
-    // Exibe o vetor original antes da ordenação
+void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho)
+{
     printf("\n\nVetor original:\n");
-    for (int i = 0; i < tamanho; i++) {
+    for (int i = 0; i < tamanho; i++)
+    {
         printf("%d ", vetor[i]);
     }
-    
-    // Declara variáveis para medir o tempo de execução
-    clock_t inicio, fim;          // Variáveis para armazenar o tempo inicial e final
-    double tempo_ordenacao;       // Variável para calcular o tempo em segundos
+
+    clock_t inicio, fim;
+    double tempo_ordenacao;
 
     // Inicia a contagem de tempo
     inicio = clock();
-    
-    // Chama o algoritmo de ordenação fornecido como argumento
+
+    // Executa o algoritmo de ordenação
     alg_ordenacao(vetor, tamanho);
-    
+
     // Finaliza a contagem de tempo
     fim = clock();
 
-    // Exibe o vetor após a ordenação
     printf("\nVetor ordenado:\n");
-    for (int i = 0; i < tamanho; i++) {
+    for (int i = 0; i < tamanho; i++)
+    {
         printf("%d ", vetor[i]);
     }
 
-    // Calcula o tempo total de execução em segundos
+    // Calcula o tempo de execução em segundos
     tempo_ordenacao = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
 
-    // Exibe o tempo de ordenação
+    // Imprime o resultado
     printf("\n\nTempo de ordenacao: %.6f segundos\n", tempo_ordenacao);
 }
 
-// Função de encapsulamento para o QuickSort
-void quicksort_wrapper(int *vetor, int tamanho) {
-    // Chama o QuickSort, passando o vetor e os índices inicial e final
-    quicksort(vetor, 0, tamanho - 1);
+void quicksort_wrapper(int *vetor, int tamanho)
+{
+    quicksort(vetor, 0, tamanho - 1); // Chama o QuickSort com índices
 }
 
-// Função de encapsulamento para o ShellSort
-void shellsort_wrapper(int *vetor, int tamanho) {
-    // Define a sequência de incrementos (sequência de Knuth) para o ShellSort
-    int incrementos[] = {121, 40, 13, 4, 1};
+void shellsort_wrapper(int *vetor, int tamanho)
+{
+    int incrementos[] = {121, 40, 13, 4, 1}; // Sequência de Knuth
     int num_incrementos = sizeof(incrementos) / sizeof(incrementos[0]);
-    
-    // Chama o ShellSort com os incrementos definidos
     shellsort(vetor, tamanho, incrementos, num_incrementos);
 }
 
-// Função de encapsulamento para o MergeSort
-void mergesort_wrapper(int *vetor, int tamanho) {
-    // Chama o MergeSort, passando o vetor e os índices inicial e final
-    mergesort(vetor, 0, tamanho - 1);
+void mergesort_wrapper(int *vetor, int tamanho)
+{
+    mergesort(vetor, 0, tamanho - 1); // Chama o MergeSort com índices
 }
 
 /*
@@ -500,19 +507,16 @@ void mergesort_wrapper(int *vetor, int tamanho) {
  * Compara e troca elementos adjacentes até que o array esteja ordenado.
  * Complexidade: O(n^2). Simples e intuitivo, mas ineficiente para grandes conjuntos.
  */
-void bubblesort(int v[], int n) {
-    // Declaração de variáveis
+void bubblesort(int v[], int n)
+{
     int i, j, aux;
-
-    // Laço externo que controla as iterações do algoritmo
-    // Representa a quantidade de passagens pelo vetor
-    for (i = 0; i < n; i++) {
-        // Laço interno que compara pares adjacentes
-        // A cada iteração, "empurra" o maior elemento restante para o final
-        for (j = 0; j < n - 1; j++) {
-            // Verifica se os elementos adjacentes estão fora de ordem
-            if (v[j] > v[j + 1]) {
-                // Realiza a troca dos elementos
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n - 1; j++)
+        {
+            // Troca pares adjacentes fora de ordem
+            if (v[j] > v[j + 1])
+            {
                 aux = v[j];
                 v[j] = v[j + 1];
                 v[j + 1] = aux;
@@ -526,28 +530,25 @@ void bubblesort(int v[], int n) {
  * Seleciona o menor elemento a cada iteração e o coloca na posição correta.
  * Complexidade: O(n^2). Ideal para aprendizado, mas ineficiente para grandes conjuntos.
  */
-void selection_sort(int num[], int tam) {
-    // Declaração de variáveis
+void selection_sort(int num[], int tam)
+{
     int i, j, min;
-
-    // Laço externo que percorre o vetor até o penúltimo elemento
-    for (i = 0; i < (tam - 1); i++) {
-        // Assume que o menor elemento está na posição atual (i)
+    for (i = 0; i < (tam - 1); i++)
+    {
         min = i;
-
-        // Laço interno para encontrar o menor elemento no subvetor restante
-        for (j = (i + 1); j < tam; j++) {
-            // Verifica se o elemento atual (num[j]) é menor que o mínimo encontrado
-            if (num[j] < num[min]) {
-                min = j; // Atualiza o índice do menor elemento
+        for (j = (i + 1); j < tam; j++)
+        {
+            if (num[j] < num[min])
+            {
+                min = j;
             }
         }
-
-        // Troca os elementos apenas se o menor encontrado não for o próprio elemento atual
-        if (i != min) {
-            int swap = num[i];    // Salva o valor atual em uma variável auxiliar
-            num[i] = num[min];    // Coloca o menor valor na posição atual
-            num[min] = swap;      // Coloca o valor original da posição atual na posição do menor
+        // Troca apenas se o índice atual não for o do menor
+        if (i != min)
+        {
+            int swap = num[i];
+            num[i] = num[min];
+            num[min] = swap;
         }
     }
 }
@@ -557,22 +558,18 @@ void selection_sort(int num[], int tam) {
  * Insere elementos em suas posições corretas à medida que o array é percorrido.
  * Complexidade: O(n^2), mas eficiente para listas pequenas ou quase ordenadas.
  */
-void insertion_sort(int v[], int n) {
-    // Declaração de variáveis
+void insertion_sort(int v[], int n)
+{
     int i, j, elem;
-
-    // Laço externo: percorre os elementos do vetor a partir do segundo elemento (índice 1)
-    for (i = 1; i < n; i++) {
-        // Armazena o elemento atual que será inserido na posição correta
+    for (i = 1; i < n; i++)
+    {
         elem = v[i];
-
-        // Laço interno: desloca os elementos maiores que "elem" para frente
-        for (j = i - 1; j >= 0 && elem < v[j]; j--) {
-            v[j + 1] = v[j]; // Move o elemento maior uma posição à frente
+        // Move os elementos maiores para abrir espaço
+        for (j = i - 1; j >= 0 && elem < v[j]; j--)
+        {
+            v[j + 1] = v[j];
         }
-
-        // Insere o elemento armazenado na posição correta
-        v[j + 1] = elem;
+        v[j + 1] = elem; // Insere o elemento na posição correta
     }
 }
 
@@ -581,26 +578,20 @@ void insertion_sort(int v[], int n) {
  * Utiliza incrementos (gaps) para melhorar a eficiência do Insertion Sort.
  * Complexidade: Depende dos gaps utilizados, mas geralmente O(n^1.5) em média.
  */
-void shellsort(int v[], int n, int incrementos[], int numinc) {
-    // Declaração de variáveis
+void shellsort(int v[], int n, int incrementos[], int numinc)
+{
     int incr, i, j, h, aux;
-
-    // Laço para iterar sobre os diferentes valores de "gap" (incremento) fornecidos
-    for (incr = 0; incr < numinc; incr++) {
-        h = incrementos[incr];  // Atualiza o valor do "gap" (distância de comparação entre elementos)
-
-        // Laço principal para percorrer os elementos do vetor, começando pelo índice 'h'
-        for (i = h; i < n; i++) {
-            aux = v[i];  // Armazena o valor atual que será inserido na posição correta
-
-            // Laço interno: compara o elemento atual com o anterior dentro do gap
-            // Desloca os elementos maiores que "aux" para abrir espaço
-            for (j = i - h; j >= 0 && v[j] > aux; j -= h) {
-                v[j + h] = v[j];  // Move o elemento para frente dentro do gap
+    for (incr = 0; incr < numinc; incr++)
+    {
+        h = incrementos[incr]; // Gap atual
+        for (i = h; i < n; i++)
+        {
+            aux = v[i];
+            for (j = i - h; j >= 0 && v[j] > aux; j -= h)
+            {
+                v[j + h] = v[j]; // Move elementos dentro do gap
             }
-
-            // Insere o elemento armazenado no lugar correto
-            v[j + h] = aux;
+            v[j + h] = aux; // Insere o elemento
         }
     }
 }
@@ -610,98 +601,155 @@ void shellsort(int v[], int n, int incrementos[], int numinc) {
  * Divide o array em dois subarrays e os ordena recursivamente.
  * Complexidade: O(n log n) em média, mas O(n^2) no pior caso.
  */
-void quicksort(int v[], int inf, int sup) {
-    // Declaração de variável auxiliar para troca de elementos
-    int aux;
+int *quicksort(int v[], int inf, int sup)
+{
+    int *eficiencia = (int *)calloc(2, sizeof(int)); // Aloca e inicializa eficiência
 
-    // Verifica se o vetor tem mais de um elemento para ordenar
-    if (inf < sup) {
-        // Calcula o índice do meio do vetor
+    if (inf < sup)
+    {
+        eficiencia[0]++; // Comparação da condição de partição
+
+        // Determina a mediana como pivô
         int meio = (inf + sup) / 2;
-
-        // Seleciona três elementos: o primeiro (inf), o do meio e o último (sup)
         int a = v[inf], b = v[meio], c = v[sup];
         int pivoIndex;
 
-        // Determina o pivô utilizando a mediana dos três elementos
-        // O pivô será o valor que está entre os outros dois
-        if ((a > b) ^ (a > c)) 
-            pivoIndex = inf;  // Se 'a' é maior que 'b' ou 'c', 'a' é o pivô
-        else if ((b > a) ^ (b > c)) 
-            pivoIndex = meio; // Se 'b' é maior que 'a' ou 'c', 'b' é o pivô
+        if ((a > b) ^ (a > c))
+        {
+            eficiencia[0]++;
+            pivoIndex = inf;
+        }
+        else if ((b > a) ^ (b > c))
+        {
+            eficiencia[0]++;
+            pivoIndex = meio;
+        }
         else
-            pivoIndex = sup;  // Se 'c' é o pivô
+        {
+            eficiencia[0]++;
+            pivoIndex = sup;
+        }
 
-        // Coloca o pivô na posição do meio (para facilitar a partição)
         int pivo = v[pivoIndex];
         v[pivoIndex] = v[meio];
-        v[meio] = pivo;
+        v[meio] = pivo; // Coloca o pivô na posição central
 
-        // Inicializa os índices para percorrer o vetor
-        int i = inf;
-        int j = sup;
+        // Particiona o array
+        int i = inf, j = sup;
+        do
+        {
+            while (v[i] < pivo)
+            {
+                eficiencia[0]++; // Comparação
+                i++;
+            }
+            eficiencia[0]++; // Comparação que interrompe o while
 
-        // Loop de partição: organiza os elementos ao redor do pivô
-        do {
-            // Encontra o primeiro elemento maior ou igual ao pivô à esquerda
-            while (v[i] < pivo) i++;
-            // Encontra o primeiro elemento menor ou igual ao pivô à direita
-            while (v[j] > pivo) j--;
-            // Se os índices ainda estão na ordem correta (i <= j), troca os elementos
-            if (i <= j) {
-                aux = v[i];
+            while (v[j] > pivo)
+            {
+                eficiencia[0]++; // Comparação
+                j--;
+            }
+            eficiencia[0]++; // Comparação que interrompe o while
+
+            if (i <= j)
+            {
+                eficiencia[1]++; // Movimentação
+                int aux = v[i];
                 v[i] = v[j];
                 v[j] = aux;
-                i++;  // Avança o índice da esquerda
-                j--;  // Retrocede o índice da direita
+                i++;
+                j--;
             }
-        } while (i <= j);  // Repete enquanto i e j não se cruzarem
+        } while (i <= j);
 
-        // Recursão: ordena as duas sublistas geradas pela partição
-        if (inf < j) quicksort(v, inf, j);  // Ordena a parte à esquerda do pivô
-        if (i < sup) quicksort(v, i, sup);  // Ordena a parte à direita do pivô
+        // Chamadas recursivas para as partições
+        if (inf < j)
+        {
+            int *eficiencia_esq = quicksort(v, inf, j);
+            if (eficiencia_esq)
+            {
+                eficiencia[0] += eficiencia_esq[0];
+                eficiencia[1] += eficiencia_esq[1];
+                free(eficiencia_esq); // Libera memória da chamada recursiva
+            }
+        }
+
+        if (i < sup)
+        {
+            int *eficiencia_dir = quicksort(v, i, sup);
+            if (eficiencia_dir)
+            {
+                eficiencia[0] += eficiencia_dir[0];
+                eficiencia[1] += eficiencia_dir[1];
+                free(eficiencia_dir); // Libera memória da chamada recursiva
+            }
+        }
     }
+    return eficiencia;
 }
 
 /*
  * Rearranja um heap para manter a propriedade de heap (pai maior que os filhos).
  */
-void rearranjar_heap(int v[], int i, int tamanho_do_heap) {
-    // Declaração de variáveis
-    int esq, dir, maior, aux;
+int *rearranjar_heap(int v[], int i, int tamanho_do_heap)
+{
+    int *eficiencia = (int *)calloc(2, sizeof(int));
+    if (!eficiencia)
+        return NULL;
 
-    // Calcula os índices dos filhos esquerdo e direito do nó i
-    esq = 2 * i + 1;  // Índice do filho esquerdo
-    dir = 2 * i + 2;  // Índice do filho direito
+    int esq = 2 * i + 1;
+    int dir = 2 * i + 2;
+    int maior = i;
+    int aux;
 
-    // Verifica se o filho esquerdo é maior que o nó atual
+    // Verifica se o filho esquerdo é maior que o pai
     if ((esq < tamanho_do_heap) && (v[esq] > v[i]))
-        maior = esq;  // Se o filho esquerdo é maior, define 'maior' como esq
-    else
-        maior = i;  // Caso contrário, o maior é o nó atual
-
-    // Verifica se o filho direito é maior que o maior valor encontrado até agora
-    if ((dir < tamanho_do_heap) && (v[dir] > v[maior]))
-        maior = dir;  // Se o filho direito é maior, atualiza 'maior'
-
-    // Se o maior não for o nó atual, realiza a troca
-    if (maior != i) {
-        aux = v[i];  // Armazena o valor atual em 'aux'
-        v[i] = v[maior];  // Coloca o maior valor no nó atual
-        v[maior] = aux;  // Coloca o valor do nó atual no lugar do maior
-
-        // Chama recursivamente para ajustar a subárvore alterada
-        rearranjar_heap(v, maior, tamanho_do_heap);
+    {
+        eficiencia[0]++; // Conta a comparação
+        maior = esq;
     }
+    else
+    {
+        eficiencia[0]++; // Mesmo se falso, a comparação foi feita
+    }
+
+    // Verifica se o filho direito é maior que o atual "maior"
+    if ((dir < tamanho_do_heap) && (v[dir] > v[maior]))
+    {
+        eficiencia[0]++; // Conta a comparação
+        maior = dir;
+    }
+
+    // Se o maior não for o pai, troque os elementos
+    if (maior != i)
+    {
+        eficiencia[1]++; // Conta a movimentação
+
+        aux = v[i];
+        v[i] = v[maior];
+        v[maior] = aux;
+
+        // Chamada recursiva para o novo "maior"
+        int *eficiencia_recursiva = rearranjar_heap(v, maior, tamanho_do_heap);
+        if (eficiencia_recursiva)
+        {
+            eficiencia[0] += eficiencia_recursiva[0]; // Soma comparações
+            eficiencia[1] += eficiencia_recursiva[1]; // Soma movimentações
+            free(eficiencia_recursiva);               // Libera memória da recursão
+        }
+    }
+
+    return eficiencia;
 }
 
 /*
  * Constrói um heap máximo a partir do array fornecido.
  */
-void construir_heap(int v[], int n) {
-    // Laço para percorrer os nós internos da árvore (começa do último nó pai)
-    for (int i = n / 2 - 1; i >= 0; i--) {
-        // Chama a função de rearranjo para construir o heap a partir do índice i
+void construir_heap(int v[], int n)
+{
+    for (int i = n / 2 - 1; i >= 0; i--)
+    {
         rearranjar_heap(v, i, n);
     }
 }
@@ -711,50 +759,90 @@ void construir_heap(int v[], int n) {
  * Utiliza a estrutura de heap para ordenar os elementos, extrair o maior e reconstruir o heap.
  * Complexidade: O(n log n).
  */
-void heapsort(int v[], int n) {
-    // Constrói o heap máximo a partir do vetor
-    construir_heap(v, n);
+int *heapsort(int v[], int n)
+{
+    int *eficiencia = (int *)calloc(2, sizeof(int));
 
-    // Laço para remover o maior elemento (raiz) do heap e colocá-lo no final do vetor
-    for (int i = n - 1; i > 0; i--) {
-        // Troca o maior elemento (na posição 0) com o último elemento não ordenado
+    construir_heap(v, n); // Constrói o heap máximo
+    for (int i = n - 1; i > 0; i--)
+    {
         int aux = v[0];
         v[0] = v[i];
-        v[i] = aux;  // Coloca o maior elemento no final do vetor
+        v[i] = aux; // Coloca o maior elemento no final
+        eficiencia[1]++;
 
-        // Ajusta o heap após a remoção do maior elemento
-        rearranjar_heap(v, 0, i);  // Ajusta o heap para manter a propriedade do heap máximo
+        int *auxiliar = rearranjar_heap(v, 0, i); // Ajusta o heap
+        eficiencia[0] += auxiliar[0];
+        eficiencia[1] += auxiliar[1];
     }
+    return eficiencia;
 }
-
 
 /*
  * Merge Sort: divide o array em duas partes, ordena-as e as combina.
  */
-void merge(int v[], int inf, int meio, int sup) {
-    // Inicializa os índices para percorrer os dois subarrays
-    int i = inf, j = meio + 1, k = 0;
-    int aux[sup - inf + 1];  // Array auxiliar para armazenar a combinação dos subarrays
+int *merge(int v[], int inf, int meio, int sup)
+{
+    // Aloca e inicializa o array de eficiência
+    int *eficiencia = (int *)calloc(2, sizeof(int));
+    if (!eficiencia)
+        return NULL;
 
-    // Combina os dois subarrays em ordem crescente
-    while (i <= meio && j <= sup) {
-        if (v[i] <= v[j]) {
-            aux[k++] = v[i++];  // Adiciona o menor elemento ao array auxiliar
-        } else {
-            aux[k++] = v[j++];  // Adiciona o menor elemento do segundo subarray
+    // Tamanho do array auxiliar
+    int tamanho = sup - inf + 1;
+
+    // Array auxiliar dinâmico
+    int *aux = (int *)malloc(tamanho * sizeof(int));
+    if (!aux)
+    {
+        free(eficiencia);
+        return NULL;
+    }
+
+    int i = inf, j = meio + 1, k = 0;
+
+    // Combina os dois subarrays em ordem
+    while (i <= meio && j <= sup)
+    {
+        eficiencia[0]++; // Comparação
+
+        if (v[i] <= v[j])
+        {
+            eficiencia[1]++; // Movimentação
+            aux[k++] = v[i++];
+        }
+        else
+        {
+            eficiencia[1]++; // Movimentação
+            aux[k++] = v[j++];
         }
     }
 
-    // Copia os elementos restantes do primeiro subarray (se houver)
-    while (i <= meio) aux[k++] = v[i++];
-
-    // Copia os elementos restantes do segundo subarray (se houver)
-    while (j <= sup) aux[k++] = v[j++];
-
-    // Copia o array auxiliar de volta para o vetor original
-    for (i = inf, k = 0; i <= sup; i++, k++) {
-        v[i] = aux[k];  // Substitui os elementos do vetor original pelos ordenados
+    // Copia elementos restantes do primeiro subarray
+    while (i <= meio)
+    {
+        eficiencia[1]++; // Movimentação
+        aux[k++] = v[i++];
     }
+
+    // Copia elementos restantes do segundo subarray
+    while (j <= sup)
+    {
+        eficiencia[1]++; // Movimentação
+        aux[k++] = v[j++];
+    }
+
+    // Copia o array auxiliar de volta para o array original
+    for (i = inf, k = 0; i <= sup; i++, k++)
+    {
+        eficiencia[1]++; // Movimentação
+        v[i] = aux[k];
+    }
+
+    // Libera o array auxiliar
+    free(aux);
+
+    return eficiencia;
 }
 
 /*
@@ -762,125 +850,184 @@ void merge(int v[], int inf, int meio, int sup) {
  * Divide o array em subarrays, ordena cada subarray e os combina.
  * Complexidade: O(n log n), sempre.
  */
-void mergesort(int v[], int inf, int sup) {
-    // Verifica se o vetor contém mais de um elemento
-    if (inf < sup) {
-        // Calcula o índice do meio para dividir o vetor em duas metades
+int *mergesort(int v[], int inf, int sup)
+{
+    int *eficiencia = (int *)calloc(2, sizeof(int));
+
+    if (inf < sup)
+    {
         int meio = (inf + sup) / 2;
 
-        // Chama recursivamente a função para ordenar a primeira metade do vetor
-        mergesort(v, inf, meio);
+        // Chamada recursiva para o lado esquerdo
+        int *aux = mergesort(v, inf, meio);
+        if (aux)
+        {
+            eficiencia[0] += aux[0];
+            eficiencia[1] += aux[1];
+            free(aux);
+        }
 
-        // Chama recursivamente a função para ordenar a segunda metade do vetor
-        mergesort(v, meio + 1, sup);
+        // Chamada recursiva para o lado direito
+        aux = mergesort(v, meio + 1, sup);
+        if (aux)
+        {
+            eficiencia[0] += aux[0];
+            eficiencia[1] += aux[1];
+            free(aux);
+        }
 
-        // Combina as duas metades ordenadas em um único vetor ordenado
-        merge(v, inf, meio, sup);
+        // Combina os dois subarrays
+        aux = merge(v, inf, meio, sup);
+        if (aux)
+        {
+            eficiencia[0] += aux[0];
+            eficiencia[1] += aux[1];
+            free(aux);
+        }
     }
-}
 
+    return eficiencia;
+}
 
 /*
  * Algoritmo de ordenação baseado no Counting Sort.
  * Conta quantos elementos são menores que cada elemento e os reposiciona.
  * Complexidade: O(n^2), por causa dos dois loops aninhados.
  */
-void contagem_de_menores(int v[], int n) {
-    // Declaração dos vetores auxiliares X e B
-    int X[n], B[n], i, j;
+int *contagem_de_menores(int v[], int n)
+{
+    int *eficiencia = (int *)calloc(2, sizeof(int));
 
-    // Inicializa o vetor de contagem (X) com zero
-    for (i = 0; i < n; i++) {
-        X[i] = 0;  // Inicializa a contagem de elementos menores com 0
+    // Aloca os vetores auxiliares dinamicamente
+    int *X = (int *)calloc(n, sizeof(int));
+    int *B = (int *)malloc(n * sizeof(int));
+    if (!X || !B)
+    {
+        free(eficiencia);
+        free(X);
+        free(B);
+        return NULL;
     }
 
     // Conta quantos elementos são menores que cada elemento v[i]
-    for (i = 1; i < n; i++) {
-        for (j = i - 1; j >= 0; j--) {
-            if (v[i] < v[j]) {
-                X[j]++;  // Aumenta a contagem de elementos menores do que v[j]
-            } else {
-                X[i]++;  // Aumenta a contagem de elementos menores do que v[i]
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = i - 1; j >= 0; j--)
+        {
+            eficiencia[0]++; // Incrementa comparações
+            if (v[i] < v[j])
+            {
+                X[j]++;
+                eficiencia[1]++; // Incrementa movimentações
+            }
+            else
+            {
+                X[i]++;
+                eficiencia[1]++; // Incrementa movimentações
             }
         }
     }
 
-    // Reposiciona os elementos no vetor B com base na contagem em X
-    for (i = 0; i < n; i++) {
-        B[X[i]] = v[i];  // Coloca o valor de v[i] na posição de acordo com a contagem
+    // Reposiciona os elementos no vetor B com base na contagem
+    for (int i = 0; i < n; i++)
+    {
+        B[X[i]] = v[i];
+        eficiencia[1]++; // Incrementa movimentações
     }
 
-    // Copia os elementos ordenados de volta para o vetor original v
-    for (i = 0; i < n; i++) {
-        v[i] = B[i];  // Copia os elementos do vetor B para o vetor original v
+    // Copia os elementos ordenados de volta para o vetor original
+    for (int i = 0; i < n; i++)
+    {
+        v[i] = B[i];
+        eficiencia[1]++; // Incrementa movimentações
     }
+
+    // Libera os vetores auxiliares
+    free(X);
+    free(B);
+
+    // Retorna o vetor de eficiência
+    return eficiencia;
 }
 
 /*
  * Radix Sort: ordena inteiros usando dígitos individuais (base 10).
  */
-int obter_maior(int v[], int n) {
-    // Inicializa a variável 'maior' com o primeiro elemento do vetor
+int obter_maior(int v[], int n, int *eficiencia)
+{
     int maior = v[0];
-
-    // Laço para percorrer os elementos restantes do vetor
-    for (int i = 1; i < n; i++) {
-        // Se o elemento atual for maior que o maior valor encontrado até agora
-        if (v[i] > maior) {
-            maior = v[i];  // Atualiza o maior valor
+    for (int i = 1; i < n; i++)
+    {
+        eficiencia[0]++; // Comparação
+        if (v[i] > maior)
+        {
+            maior = v[i];
         }
     }
-
-    // Retorna o maior valor encontrado no vetor
     return maior;
 }
 
 /*
  * Realiza Counting Sort para um dígito específico.
  */
-void contar_classificar(int v[], int n, int exp) {
-    // Vetor auxiliar para armazenar os elementos classificados
+int *contar_classificar(int v[], int n, int exp)
+{
+    int *eficiencia = (int *)calloc(2, sizeof(int)); // eficiencia[0] -> comparações e eficiencia[1] -> movimentações
     int aux[n];
-
-    // Vetor de contagem para cada dígito (0 a 9)
     int contagem[10] = {0};
 
-    // Conta a frequência de cada dígito no vetor
-    for (int i = 0; i < n; i++) {
-        int digito = (v[i] / exp) % 10;  // Extrai o dígito correspondente à posição exp
-        contagem[digito]++;  // Aumenta a contagem do dígito
+    // Conta a frequência de cada dígito
+    for (int i = 0; i < n; i++)
+    {
+        int digito = (v[i] / exp) % 10;
+        contagem[digito]++;
+        eficiencia[1]++; // Movimentação ao atualizar contagem
     }
 
-    // Calcula as posições acumuladas para a classificação dos elementos
-    for (int i = 1; i < 10; i++) {
-        contagem[i] += contagem[i - 1];  // Ajusta a posição dos dígitos
+    // Atualiza a contagem para determinar a posição dos elementos
+    for (int i = 1; i < 10; i++)
+    {
+        contagem[i] += contagem[i - 1];
+        eficiencia[1]++; // Movimentação ao atualizar contagem
     }
 
-    // Reorganiza os elementos no vetor auxiliar com base na contagem
-    for (int i = n - 1; i >= 0; i--) {
-        int digito = (v[i] / exp) % 10;  // Extrai o dígito correspondente à posição exp
-        aux[--contagem[digito]] = v[i];  // Coloca o elemento na posição correta
+    // Coloca os elementos ordenados no array auxiliar
+    for (int i = n - 1; i >= 0; i--)
+    {
+        int digito = (v[i] / exp) % 10;
+        aux[--contagem[digito]] = v[i];
+        eficiencia[1]++; // Movimentação ao inserir no auxiliar
     }
 
-    // Copia os elementos classificados de volta para o vetor original
-    for (int i = 0; i < n; i++) {
-        v[i] = aux[i];  // Substitui os elementos do vetor original pelos classificados
+    // Copia os elementos do array auxiliar de volta para o array original
+    for (int i = 0; i < n; i++)
+    {
+        v[i] = aux[i];
+        eficiencia[1]++; // Movimentação ao copiar de volta
     }
+
+    return eficiencia;
 }
-
 
 /*
  * Algoritmo de ordenação baseado no Radix Sort.
  * Ordena números inteiros usando seus dígitos individuais, de menor para maior ordem.
  * Complexidade: O(nk), onde k é o número de dígitos do maior número.
  */
-void radixsort(int v[], int n) {
-    // Obtém o maior número do vetor para determinar o número de dígitos
-    int maior = obter_maior(v, n);
+int *radixsort(int v[], int n)
+{
+    int *eficiencia = (int *)calloc(2, sizeof(int));
 
-    // Ordena o vetor considerando cada dígito, começando do menos significativo
-    for (int exp = 1; maior / exp > 0; exp *= 10) {
-        // Classifica os elementos com base no dígito atual (exp)
-        contar_classificar(v, n, exp);
+    int maior = obter_maior(v, n, eficiencia);
+
+    // Para cada dígito do maior número, realiza o Counting Sort
+    for (int exp = 1; maior / exp > 0; exp *= 10)
+    {
+        int *aux_eficiencia = contar_classificar(v, n, exp);
+        eficiencia[0] += aux_eficiencia[0]; // Acumula as comparações
+        eficiencia[1] += aux_eficiencia[1]; // Acumula as movimentações
+        free(aux_eficiencia);               // Libera memória alocada para eficiência
     }
+
+    return eficiencia;
 }
