@@ -9,18 +9,18 @@
 #include "vetores.h"
 
 // Protótipo da função de ordenação, permitindo passar diferentes algoritmos como parâmetro
-typedef int* (*AlgOrdenacao)(int *, int);
+typedef int *(*AlgOrdenacao)(int *, int);
 
 // Funções auxiliares para execução de algoritmos específicos
 void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho);
-int* quicksort_wrapper(int *vetor, int tamanho);
-int* shellsort_wrapper(int *vetor, int tamanho);
-int* mergesort_wrapper(int *vetor, int tamanho);
+int *quicksort_wrapper(int *vetor, int tamanho);
+int *shellsort_wrapper(int *vetor, int tamanho);
+int *mergesort_wrapper(int *vetor, int tamanho);
 int *rearranjar_heap(int v[], int i, int tamanho_do_heap);
 void construir_heap(int v[], int n);
 int *merge(int v[], int inf, int meio, int sup);
-int obter_maior(int v[], int n, int* eficiencia);
-int* contar_classificar(int v[], int n, int exp);
+int obter_maior(int v[], int n, int *eficiencia);
+int *contar_classificar(int v[], int n, int exp);
 
 // Declaração dos algoritmos de ordenação implementados
 int *bubblesort(int v[], int n);
@@ -490,23 +490,23 @@ void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho)
     free(eficiencia);
 }
 
-int* quicksort_wrapper(int *vetor, int tamanho)
+int *quicksort_wrapper(int *vetor, int tamanho)
 {
-    int* eficiencia = quicksort(vetor, 0, tamanho - 1); // Chama o QuickSort com índices
+    int *eficiencia = quicksort(vetor, 0, tamanho - 1); // Chama o QuickSort com índices
     return eficiencia;
 }
 
-int* shellsort_wrapper(int *vetor, int tamanho)
+int *shellsort_wrapper(int *vetor, int tamanho)
 {
     int incrementos[] = {121, 40, 13, 4, 1}; // Sequência de Knuth
     int num_incrementos = sizeof(incrementos) / sizeof(incrementos[0]);
-    int* eficiencia = shellsort(vetor, tamanho, incrementos, num_incrementos);
+    int *eficiencia = shellsort(vetor, tamanho, incrementos, num_incrementos);
     return eficiencia;
 }
 
-int* mergesort_wrapper(int *vetor, int tamanho)
+int *mergesort_wrapper(int *vetor, int tamanho)
 {
-    int* eficiencia = mergesort(vetor, 0, tamanho - 1); // Chama o MergeSort com índices
+    int *eficiencia = mergesort(vetor, 0, tamanho - 1); // Chama o MergeSort com índices
     return eficiencia;
 }
 
@@ -515,20 +515,24 @@ int* mergesort_wrapper(int *vetor, int tamanho)
  * Compara e troca elementos adjacentes até que o array esteja ordenado.
  * Complexidade: O(n^2). Simples e intuitivo, mas ineficiente para grandes conjuntos.
  */
-int* bubblesort(int v[], int n) {
+int *bubblesort(int v[], int n)
+{
     // Declaração de variáveis
     int i, j, aux;
-    int *eficiencia = (int *) calloc(2, sizeof(int));   // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+    int *eficiencia = (int *)calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
     // Laço externo que controla as iterações do algoritmo
     // Representa a quantidade de passagens pelo vetor
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < n; i++)
+    {
         // Laço interno que compara pares adjacentes
         // A cada iteração, "empurra" o maior elemento restante para o final
-        for (j = 0; j < n - 1; j++) {
+        for (j = 0; j < n - 1; j++)
+        {
             // Verifica se os elementos adjacentes estão fora de ordem
-            eficiencia[0]++; 
-            if (v[j] > v[j + 1]) {
+            eficiencia[0]++;
+            if (v[j] > v[j + 1])
+            {
                 // Realiza a troca dos elementos
                 aux = v[j];
                 v[j] = v[j + 1];
@@ -546,32 +550,37 @@ int* bubblesort(int v[], int n) {
  * Seleciona o menor elemento a cada iteração e o coloca na posição correta.
  * Complexidade: O(n^2). Ideal para aprendizado, mas ineficiente para grandes conjuntos.
  */
-int* selection_sort(int num[], int tam) {
+int *selection_sort(int num[], int tam)
+{
     // Declaração de variáveis
     int i, j, min;
 
-    int *eficiencia = (int *) calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+    int *eficiencia = (int *)calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
     // Laço externo que percorre o vetor até o penúltimo elemento
-    for (i = 0; i < (tam - 1); i++) {
+    for (i = 0; i < (tam - 1); i++)
+    {
         // Assume que o menor elemento está na posição atual (i)
         min = i;
 
         // Laço interno para encontrar o menor elemento no subvetor restante
-        for (j = (i + 1); j < tam; j++) {
+        for (j = (i + 1); j < tam; j++)
+        {
             // Verifica se o elemento atual (num[j]) é menor que o mínimo encontrado
             eficiencia[0]++;
-            if (num[j] < num[min]) {
+            if (num[j] < num[min])
+            {
                 min = j; // Atualiza o índice do menor elemento
             }
         }
 
         // Troca os elementos apenas se o menor encontrado não for o próprio elemento atual
         eficiencia[0]++;
-        if (i != min) {
-            int swap = num[i];    // Salva o valor atual em uma variável auxiliar
-            num[i] = num[min];    // Coloca o menor valor na posição atual
-            num[min] = swap;      // Coloca o valor original da posição atual na posição do menor
+        if (i != min)
+        {
+            int swap = num[i]; // Salva o valor atual em uma variável auxiliar
+            num[i] = num[min]; // Coloca o menor valor na posição atual
+            num[min] = swap;   // Coloca o valor original da posição atual na posição do menor
             eficiencia[1]++;
         }
     }
@@ -582,18 +591,21 @@ int* selection_sort(int num[], int tam) {
  * Insere elementos em suas posições corretas à medida que o array é percorrido.
  * Complexidade: O(n^2), mas eficiente para listas pequenas ou quase ordenadas.
  */
-int* insertion_sort(int v[], int n) {
+int *insertion_sort(int v[], int n)
+{
     // Declaração de variáveis
     int i, j, elem;
-    int *eficiencia = (int *) calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+    int *eficiencia = (int *)calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
     // Laço externo: percorre os elementos do vetor a partir do segundo elemento (índice 1)
-    for (i = 1; i < n; i++) {
+    for (i = 1; i < n; i++)
+    {
         // Armazena o elemento atual que será inserido na posição correta
         elem = v[i];
 
         // Laço interno: desloca os elementos maiores que "elem" para frente
-        for (j = i - 1; j >= 0 && elem < v[j]; j--) {
+        for (j = i - 1; j >= 0 && elem < v[j]; j--)
+        {
             eficiencia[0]++;
             v[j + 1] = v[j]; // Move o elemento maior uma posição à frente
             eficiencia[1]++;
@@ -610,24 +622,28 @@ int* insertion_sort(int v[], int n) {
  * Utiliza incrementos (gaps) para melhorar a eficiência do Insertion Sort.
  * Complexidade: Depende dos gaps utilizados, mas geralmente O(n^1.5) em média.
  */
-int* shellsort(int v[], int n, int incrementos[], int numinc) {
+int *shellsort(int v[], int n, int incrementos[], int numinc)
+{
     // Declaração de variáveis
     int incr, i, j, h, aux;
-    int *eficiencia = (int *) calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+    int *eficiencia = (int *)calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
     // Laço para iterar sobre os diferentes valores de "gap" (incremento) fornecidos
-    for (incr = 0; incr < numinc; incr++) {
-        h = incrementos[incr];  // Atualiza o valor do "gap" (distância de comparação entre elementos)
+    for (incr = 0; incr < numinc; incr++)
+    {
+        h = incrementos[incr]; // Atualiza o valor do "gap" (distância de comparação entre elementos)
 
         // Laço principal para percorrer os elementos do vetor, começando pelo índice 'h'
-        for (i = h; i < n; i++) {
-            aux = v[i];  // Armazena o valor atual que será inserido na posição correta
+        for (i = h; i < n; i++)
+        {
+            aux = v[i]; // Armazena o valor atual que será inserido na posição correta
 
             // Laço interno: compara o elemento atual com o anterior dentro do gap
             // Desloca os elementos maiores que "aux" para abrir espaço
-            for (j = i - h; j >= 0 && v[j] > aux; j -= h) {
+            for (j = i - h; j >= 0 && v[j] > aux; j -= h)
+            {
                 eficiencia[0]++;
-                v[j + h] = v[j];  // Move o elemento para frente dentro do gap
+                v[j + h] = v[j]; // Move o elemento para frente dentro do gap
                 eficiencia[1]++;
             }
 
@@ -645,143 +661,160 @@ int* shellsort(int v[], int n, int incrementos[], int numinc) {
  */
 int *quicksort(int v[], int inf, int sup)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+    // Aloca e inicializa o vetor de eficiência
+    // eficiencia[0] -> número de comparações realizadas
+    // eficiencia[1] -> número de movimentações realizadas
+    int *eficiencia = (int *)calloc(2, sizeof(int));
 
+    // Verifica se há mais de um elemento na partição atual
     if (inf < sup)
     {
-        eficiencia[0]++; // Comparação da condição de partição
+        eficiencia[0]++; // Incrementa contagem de comparações para a condição do if
 
-        // Determina a mediana como pivô
-        int meio = (inf + sup) / 2;
-        int a = v[inf], b = v[meio], c = v[sup];
+        // Determina o pivô como a mediana de três elementos: primeiro, central e último
+        int meio = (inf + sup) / 2;              // Índice do elemento central
+        int a = v[inf], b = v[meio], c = v[sup]; // Elementos para encontrar a mediana
         int pivoIndex;
 
+        // Determina o índice do pivô com base na mediana
         if ((a > b) ^ (a > c))
         {
             eficiencia[0]++;
-            pivoIndex = inf;
+            pivoIndex = inf; // Primeiro elemento é o pivô
         }
         else if ((b > a) ^ (b > c))
         {
-            eficiencia[0]++;
-            pivoIndex = meio;
+            eficiencia[0]++; 
+            pivoIndex = meio; // Elemento central é o pivô
         }
         else
         {
             eficiencia[0]++;
-            pivoIndex = sup;
+            pivoIndex = sup; // Último elemento é o pivô
         }
 
+        // Coloca o pivô na posição central para facilitar a partição
         int pivo = v[pivoIndex];
         v[pivoIndex] = v[meio];
-        v[meio] = pivo; // Coloca o pivô na posição central
+        v[meio] = pivo;
 
-        // Particiona o array
+        // Inicializa os índices para a partição
         int i = inf, j = sup;
+
+        // Realiza a partição: separa os elementos menores e maiores que o pivô
         do
         {
+            // Move o índice `i` até encontrar um elemento maior ou igual ao pivô
             while (v[i] < pivo)
             {
-                eficiencia[0]++; // Comparação
+                eficiencia[0]++;
                 i++;
             }
             eficiencia[0]++; // Comparação que interrompe o while
 
+            // Move o índice `j` até encontrar um elemento menor ou igual ao pivô
             while (v[j] > pivo)
             {
-                eficiencia[0]++; // Comparação
+                eficiencia[0]++;
                 j--;
             }
             eficiencia[0]++; // Comparação que interrompe o while
 
+            // Troca os elementos nas posições `i` e `j` se os índices ainda não se cruzaram
             if (i <= j)
             {
-                eficiencia[1]++; // Movimentação
+                eficiencia[1]++;
                 int aux = v[i];
                 v[i] = v[j];
                 v[j] = aux;
                 i++;
                 j--;
             }
-        } while (i <= j);
+        } while (i <= j); // Repete enquanto os índices não se cruzarem
 
-        // Chamadas recursivas para as partições
+        // Realiza chamadas recursivas para as partições esquerda e direita
         if (inf < j)
         {
+            // Chama recursivamente para a partição esquerda
             int *eficiencia_esq = quicksort(v, inf, j);
             if (eficiencia_esq)
             {
+                // Acumula os valores de eficiência da partição esquerda
                 eficiencia[0] += eficiencia_esq[0];
                 eficiencia[1] += eficiencia_esq[1];
-                free(eficiencia_esq); // Libera memória da chamada recursiva
+                free(eficiencia_esq);
             }
         }
 
         if (i < sup)
         {
+            // Chama recursivamente para a partição direita
             int *eficiencia_dir = quicksort(v, i, sup);
             if (eficiencia_dir)
             {
+                // Acumula os valores de eficiência da partição direita
                 eficiencia[0] += eficiencia_dir[0];
                 eficiencia[1] += eficiencia_dir[1];
-                free(eficiencia_dir); // Libera memória da chamada recursiva
+                free(eficiencia_dir);
             }
         }
     }
+
+    // Retorna o vetor de eficiência contendo as contagens de comparações e movimentações
     return eficiencia;
 }
 
 /*
  * Rearranja um heap para manter a propriedade de heap (pai maior que os filhos).
  */
-int *rearranjar_heap(int v[], int i, int tamanho_do_heap)
-{
+int *rearranjar_heap(int v[], int i, int tamanho_do_heap) {
+    // Aloca e inicializa o vetor de eficiência
+    // eficiencia[0] -> número de comparações realizadas
+    // eficiencia[1] -> número de movimentações realizadas
     int *eficiencia = (int *)calloc(2, sizeof(int));
     if (!eficiencia)
-        return NULL;
+        return NULL; // Retorna NULL em caso de falha na alocação
 
+    // Calcula os índices dos filhos esquerdo e direito do nó atual
     int esq = 2 * i + 1;
     int dir = 2 * i + 2;
-    int maior = i;
+    int maior = i; // Assume que o maior elemento está no índice atual
     int aux;
 
-    // Verifica se o filho esquerdo é maior que o pai
-    if ((esq < tamanho_do_heap) && (v[esq] > v[i]))
-    {
-        eficiencia[0]++; // Conta a comparação
-        maior = esq;
-    }
-    else
-    {
-        eficiencia[0]++; // Mesmo se falso, a comparação foi feita
+    // Verifica se o filho esquerdo existe e é maior que o pai
+    if ((esq < tamanho_do_heap) && (v[esq] > v[i])) {
+        eficiencia[0]++; // Incrementa a contagem de comparações
+        maior = esq;     // Atualiza o índice do maior elemento
+    } else {
+        eficiencia[0]++; // Mesmo se a condição for falsa, a comparação foi feita
     }
 
-    // Verifica se o filho direito é maior que o atual "maior"
-    if ((dir < tamanho_do_heap) && (v[dir] > v[maior]))
-    {
-        eficiencia[0]++; // Conta a comparação
-        maior = dir;
+    // Verifica se o filho direito existe e é maior que o maior encontrado até agora
+    if ((dir < tamanho_do_heap) && (v[dir] > v[maior])) {
+        eficiencia[0]++; // Incrementa a contagem de comparações
+        maior = dir;     // Atualiza o índice do maior elemento
     }
 
-    // Se o maior não for o pai, troque os elementos
-    if (maior != i)
-    {
-        eficiencia[1]++; // Conta a movimentação
+    // Se o maior não for o nó atual, realiza a troca
+    if (maior != i) {
+        eficiencia[1]++; // Incrementa a contagem de movimentações
 
+        // Troca os elementos entre o nó atual e o maior filho
         aux = v[i];
         v[i] = v[maior];
         v[maior] = aux;
 
-        // Chamada recursiva para o novo "maior"
+        // Chamada recursiva para ajustar o sub-heap afetado
         int *eficiencia_recursiva = rearranjar_heap(v, maior, tamanho_do_heap);
-        if (eficiencia_recursiva)
-        {
-            eficiencia[0] += eficiencia_recursiva[0]; // Soma comparações
-            eficiencia[1] += eficiencia_recursiva[1]; // Soma movimentações
-            free(eficiencia_recursiva);               // Libera memória da recursão
+        if (eficiencia_recursiva) {
+            // Soma os valores de eficiência da recursão
+            eficiencia[0] += eficiencia_recursiva[0]; // Comparações
+            eficiencia[1] += eficiencia_recursiva[1]; // Movimentações
+            free(eficiencia_recursiva);              // Libera memória da chamada recursiva
         }
     }
 
+    // Retorna o vetor de eficiência contendo as contagens de comparações e movimentações
     return eficiencia;
 }
 
@@ -801,89 +834,99 @@ void construir_heap(int v[], int n)
  * Utiliza a estrutura de heap para ordenar os elementos, extrair o maior e reconstruir o heap.
  * Complexidade: O(n log n).
  */
-int *heapsort(int v[], int n)
-{
-    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+int *heapsort(int v[], int n) {
+    // Aloca e inicializa o vetor de eficiência
+    // eficiencia[0] -> número de comparações realizadas
+    // eficiencia[1] -> número de movimentações realizadas
+    int *eficiencia = (int *)calloc(2, sizeof(int));
+    if (!eficiencia)
+        return NULL; // Retorna NULL em caso de falha na alocação
 
-    construir_heap(v, n); // Constrói o heap máximo
-    for (int i = n - 1; i > 0; i--)
-    {
+    // Etapa 1: Constrói o heap máximo a partir do vetor
+    construir_heap(v, n); // O vetor é reorganizado para obedecer às propriedades de um heap
+
+    // Etapa 2: Realiza o processo de ordenação extraindo os elementos do heap
+    for (int i = n - 1; i > 0; i--) {
+        // Troca o maior elemento (no topo do heap) com o último elemento
         int aux = v[0];
         v[0] = v[i];
-        v[i] = aux; // Coloca o maior elemento no final
-        eficiencia[1]++;
+        v[i] = aux; // O maior elemento é movido para a posição final do subarray ordenado
+        eficiencia[1]++; // Incrementa a contagem de movimentações
 
-        int *auxiliar = rearranjar_heap(v, 0, i); // Ajusta o heap
-        eficiencia[0] += auxiliar[0];
-        eficiencia[1] += auxiliar[1];
+        // Ajusta o heap para manter as propriedades do heap máximo
+        int *auxiliar = rearranjar_heap(v, 0, i); // Reorganiza o heap excluindo o último elemento
+        if (auxiliar) {
+            // Soma as eficiências retornadas pela função `rearranjar_heap`
+            eficiencia[0] += auxiliar[0]; // Comparações
+            eficiencia[1] += auxiliar[1]; // Movimentações
+            free(auxiliar);               // Libera a memória alocada para a eficiência da função chamada
+        }
     }
+
+    // Retorna o vetor de eficiência contendo as contagens de comparações e movimentações realizadas
     return eficiencia;
 }
 
 /*
  * Merge Sort: divide o array em duas partes, ordena-as e as combina.
  */
-int *merge(int v[], int inf, int meio, int sup)
-{
-    // Aloca e inicializa o array de eficiência
+int *merge(int v[], int inf, int meio, int sup) {
+    // Aloca e inicializa o vetor de eficiência
+    // eficiencia[0] -> número de comparações realizadas
+    // eficiencia[1] -> número de movimentações realizadas
     int *eficiencia = (int *)calloc(2, sizeof(int));
     if (!eficiencia)
-        return NULL;
+        return NULL; // Retorna NULL em caso de falha na alocação
 
-    // Tamanho do array auxiliar
+    // Calcula o tamanho necessário para o array auxiliar
     int tamanho = sup - inf + 1;
 
-    // Array auxiliar dinâmico
+    // Aloca o array auxiliar para armazenar os elementos temporariamente
     int *aux = (int *)malloc(tamanho * sizeof(int));
-    if (!aux)
-    {
-        free(eficiencia);
+    if (!aux) {
+        free(eficiencia); // Libera a memória de eficiência em caso de falha
         return NULL;
     }
 
+    // Inicializa índices para os dois subarrays e o array auxiliar
     int i = inf, j = meio + 1, k = 0;
 
-    // Combina os dois subarrays em ordem
-    while (i <= meio && j <= sup)
-    {
-        eficiencia[0]++; // Comparação
+    // Combina os dois subarrays ordenados no array auxiliar
+    while (i <= meio && j <= sup) {
+        eficiencia[0]++; // Incrementa a contagem de comparações
 
-        if (v[i] <= v[j])
-        {
-            eficiencia[1]++; // Movimentação
-            aux[k++] = v[i++];
-        }
-        else
-        {
-            eficiencia[1]++; // Movimentação
-            aux[k++] = v[j++];
+        // Verifica qual elemento é menor e insere no array auxiliar
+        if (v[i] <= v[j]) {
+            aux[k++] = v[i++]; // Elemento do primeiro subarray
+            eficiencia[1]++;   // Incrementa a contagem de movimentações
+        } else {
+            aux[k++] = v[j++]; // Elemento do segundo subarray
+            eficiencia[1]++;   // Incrementa a contagem de movimentações
         }
     }
 
-    // Copia elementos restantes do primeiro subarray
-    while (i <= meio)
-    {
-        eficiencia[1]++; // Movimentação
+    // Copia os elementos restantes do primeiro subarray (se houver)
+    while (i <= meio) {
         aux[k++] = v[i++];
+        eficiencia[1]++; // Incrementa a contagem de movimentações
     }
 
-    // Copia elementos restantes do segundo subarray
-    while (j <= sup)
-    {
-        eficiencia[1]++; // Movimentação
+    // Copia os elementos restantes do segundo subarray (se houver)
+    while (j <= sup) {
         aux[k++] = v[j++];
+        eficiencia[1]++; // Incrementa a contagem de movimentações
     }
 
-    // Copia o array auxiliar de volta para o array original
-    for (i = inf, k = 0; i <= sup; i++, k++)
-    {
-        eficiencia[1]++; // Movimentação
+    // Copia os elementos do array auxiliar de volta para o array original
+    for (i = inf, k = 0; i <= sup; i++, k++) {
         v[i] = aux[k];
+        eficiencia[1]++; // Incrementa a contagem de movimentações
     }
 
-    // Libera o array auxiliar
+    // Libera a memória alocada para o array auxiliar
     free(aux);
 
+    // Retorna o vetor de eficiência contendo comparações e movimentações
     return eficiencia;
 }
 
@@ -894,40 +937,51 @@ int *merge(int v[], int inf, int meio, int sup)
  */
 int *mergesort(int v[], int inf, int sup)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+    // Aloca e inicializa o vetor de eficiência
+    // eficiencia[0] -> número de comparações realizadas
+    // eficiencia[1] -> número de movimentações realizadas
+    int *eficiencia = (int *)calloc(2, sizeof(int)); // Inicializa as contagens de comparações e movimentações
+    if (!eficiencia)
+        return NULL; // Retorna NULL caso a alocação falhe
 
+    // Verifica se há mais de um elemento para ordenar
     if (inf < sup)
     {
+        // Calcula o índice do meio para dividir o array em duas metades
         int meio = (inf + sup) / 2;
 
-        // Chamada recursiva para o lado esquerdo
+        // Chamada recursiva para ordenar a metade esquerda
         int *aux = mergesort(v, inf, meio);
         if (aux)
         {
+            // Soma as comparações e movimentações das chamadas recursivas
             eficiencia[0] += aux[0];
             eficiencia[1] += aux[1];
-            free(aux);
+            free(aux); // Libera a memória da chamada recursiva
         }
 
-        // Chamada recursiva para o lado direito
+        // Chamada recursiva para ordenar a metade direita
         aux = mergesort(v, meio + 1, sup);
         if (aux)
         {
+            // Soma as comparações e movimentações das chamadas recursivas
             eficiencia[0] += aux[0];
             eficiencia[1] += aux[1];
-            free(aux);
+            free(aux); // Libera a memória da chamada recursiva
         }
 
-        // Combina os dois subarrays
+        // Combina as duas metades ordenadas em um único array ordenado
         aux = merge(v, inf, meio, sup);
         if (aux)
         {
+            // Soma as comparações e movimentações do processo de combinação
             eficiencia[0] += aux[0];
             eficiencia[1] += aux[1];
-            free(aux);
+            free(aux); // Libera a memória da função merge
         }
     }
 
+    // Retorna o vetor de eficiência com as comparações e movimentações acumuladas
     return eficiencia;
 }
 
@@ -938,57 +992,66 @@ int *mergesort(int v[], int inf, int sup)
  */
 int *contagem_de_menores(int v[], int n)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+    // Aloca e inicializa o vetor de eficiência
+    // eficiencia[0] -> número de comparações realizadas
+    // eficiencia[1] -> número de movimentações realizadas
+    int *eficiencia = (int *)calloc(2, sizeof(int)); // Inicializa as contagens de comparações e movimentações
+    if (!eficiencia)
+        return NULL; // Retorna NULL caso a alocação falhe
 
-    // Aloca os vetores auxiliares dinamicamente
-    int *X = (int *)calloc(n, sizeof(int));
-    int *B = (int *)malloc(n * sizeof(int));
+    // Aloca os vetores auxiliares X e B
+    int *X = (int *)calloc(n, sizeof(int)); // Vetor X para contar quantos elementos são menores que cada elemento
+    int *B = (int *)malloc(n * sizeof(int)); // Vetor B para armazenar o vetor ordenado
     if (!X || !B)
     {
         free(eficiencia);
         free(X);
         free(B);
-        return NULL;
+        return NULL; // Retorna NULL se houver falha na alocação
     }
 
     // Conta quantos elementos são menores que cada elemento v[i]
     for (int i = 1; i < n; i++)
     {
+        // Compara o elemento v[i] com os anteriores
         for (int j = i - 1; j >= 0; j--)
         {
-            eficiencia[0]++; // Incrementa comparações
+            eficiencia[0]++; // Incrementa o contador de comparações
+
+            // Se v[i] for menor que v[j], incrementa o contador de menores de v[i]
             if (v[i] < v[j])
             {
                 X[j]++;
-                eficiencia[1]++; // Incrementa movimentações
+                eficiencia[1]++; // Incrementa o contador de movimentações
             }
             else
             {
+                // Caso contrário, incrementa o contador de menores de v[i]
                 X[i]++;
-                eficiencia[1]++; // Incrementa movimentações
+                eficiencia[1]++; // Incrementa o contador de movimentações
             }
         }
     }
 
-    // Reposiciona os elementos no vetor B com base na contagem
+    // Reposiciona os elementos no vetor B com base na contagem de menores
     for (int i = 0; i < n; i++)
     {
-        B[X[i]] = v[i];
-        eficiencia[1]++; // Incrementa movimentações
+        B[X[i]] = v[i]; // Coloca v[i] na posição correta no vetor B
+        eficiencia[1]++; // Incrementa o contador de movimentações
     }
 
     // Copia os elementos ordenados de volta para o vetor original
     for (int i = 0; i < n; i++)
     {
-        v[i] = B[i];
-        eficiencia[1]++; // Incrementa movimentações
+        v[i] = B[i]; // Copia de B para v
+        eficiencia[1]++; // Incrementa o contador de movimentações
     }
 
-    // Libera os vetores auxiliares
+    // Libera os vetores auxiliares X e B
     free(X);
     free(B);
 
-    // Retorna o vetor de eficiência
+    // Retorna o vetor de eficiência com as contagens de comparações e movimentações
     return eficiencia;
 }
 
@@ -997,16 +1060,19 @@ int *contagem_de_menores(int v[], int n)
  */
 int obter_maior(int v[], int n, int *eficiencia)
 {
-    int maior = v[0];
+    int maior = v[0]; // Inicializa o maior valor com o primeiro elemento do vetor
+
+    // Percorre o vetor para encontrar o maior valor
     for (int i = 1; i < n; i++)
     {
-        eficiencia[0]++; // Comparação
-        if (v[i] > maior)
+        eficiencia[0]++; // Incrementa o contador de comparações
+        if (v[i] > maior) // Compara o elemento atual com o maior encontrado até o momento
         {
-            maior = v[i];
+            maior = v[i]; // Atualiza o maior valor
         }
     }
-    return maior;
+
+    return maior; // Retorna o maior valor encontrado
 }
 
 /*
@@ -1014,41 +1080,41 @@ int obter_maior(int v[], int n, int *eficiencia)
  */
 int *contar_classificar(int v[], int n, int exp)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações e eficiencia[1] -> movimentações
-    int aux[n];
-    int contagem[10] = {0};
+    int *eficiencia = (int *)calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+    int aux[n]; // Array auxiliar para armazenar a ordenação temporária
+    int contagem[10] = {0}; // Array para contar a frequência de cada dígito (0 a 9)
 
-    // Conta a frequência de cada dígito
+    // Conta a frequência de cada dígito (unidade, dezena, etc.)
     for (int i = 0; i < n; i++)
     {
-        int digito = (v[i] / exp) % 10;
-        contagem[digito]++;
-        eficiencia[1]++; // Movimentação ao atualizar contagem
+        int digito = (v[i] / exp) % 10; // Obtém o dígito correspondente à posição "exp"
+        contagem[digito]++; // Incrementa o contador para o dígito encontrado
+        eficiencia[1]++; // Incrementa o contador de movimentações
     }
 
-    // Atualiza a contagem para determinar a posição dos elementos
+    // Atualiza a contagem para determinar a posição dos elementos no vetor
     for (int i = 1; i < 10; i++)
     {
-        contagem[i] += contagem[i - 1];
-        eficiencia[1]++; // Movimentação ao atualizar contagem
+        contagem[i] += contagem[i - 1]; // Soma as frequências anteriores para determinar a posição acumulada
+        eficiencia[1]++; // Incrementa o contador de movimentações
     }
 
     // Coloca os elementos ordenados no array auxiliar
     for (int i = n - 1; i >= 0; i--)
     {
-        int digito = (v[i] / exp) % 10;
-        aux[--contagem[digito]] = v[i];
-        eficiencia[1]++; // Movimentação ao inserir no auxiliar
+        int digito = (v[i] / exp) % 10; // Obtém o dígito correspondente à posição "exp"
+        aux[--contagem[digito]] = v[i]; // Coloca o elemento na posição correta do vetor auxiliar
+        eficiencia[1]++; // Incrementa o contador de movimentações
     }
 
     // Copia os elementos do array auxiliar de volta para o array original
     for (int i = 0; i < n; i++)
     {
-        v[i] = aux[i];
-        eficiencia[1]++; // Movimentação ao copiar de volta
+        v[i] = aux[i]; // Copia de volta os elementos ordenados
+        eficiencia[1]++; // Incrementa o contador de movimentações
     }
 
-    return eficiencia;
+    return eficiencia; // Retorna o vetor de eficiência com o número de comparações e movimentações
 }
 
 /*
@@ -1058,18 +1124,24 @@ int *contar_classificar(int v[], int n, int exp)
  */
 int *radixsort(int v[], int n)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+    int *eficiencia = (int *)calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
+    // Chama a função para obter o maior valor do vetor (para determinar o número de dígitos)
     int maior = obter_maior(v, n, eficiencia);
 
-    // Para cada dígito do maior número, realiza o Counting Sort
+    // Para cada dígito do maior número (começando pela unidade, dezena, etc.), realiza o Counting Sort
     for (int exp = 1; maior / exp > 0; exp *= 10)
     {
+        // Chama a função contar_classificar para ordenar com base no dígito "exp"
         int *aux_eficiencia = contar_classificar(v, n, exp);
-        eficiencia[0] += aux_eficiencia[0]; // Acumula as comparações
-        eficiencia[1] += aux_eficiencia[1]; // Acumula as movimentações
-        free(aux_eficiencia);               // Libera memória alocada para eficiência
+        
+        // Acumula as comparações e movimentações realizadas
+        eficiencia[0] += aux_eficiencia[0]; // Soma as comparações
+        eficiencia[1] += aux_eficiencia[1]; // Soma as movimentações
+        
+        // Libera a memória alocada para eficiência da função contar_classificar
+        free(aux_eficiencia); 
     }
 
-    return eficiencia;
+    return eficiencia; // Retorna o vetor de eficiência (comparações e movimentações)
 }
