@@ -13,6 +13,7 @@ typedef int *(*AlgOrdenacao)(int *, int);
 
 // Funções auxiliares para execução de algoritmos específicos
 void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho);
+void executar_ordenacaomedia(AlgOrdenacao alg_ordenacao, int **vetor, int tamanho);
 int *quicksort_wrapper(int *vetor, int tamanho);
 int *shellsort_wrapper(int *vetor, int tamanho);
 int *mergesort_wrapper(int *vetor, int tamanho);
@@ -58,21 +59,21 @@ int main(void)
 
     switch (tam_vetor)
     {
-        case 0:
-            tam_vetor = 100;
-            break;
-        case 1:
-            tam_vetor = 1000;
-            break;
-        case 2:
-            tam_vetor = 10000;
-            break;
-        case 3:
-            tam_vetor = 100000;
-            break;
-        
-        default:
-            break;
+    case 0:
+        tam_vetor = 100;
+        break;
+    case 1:
+        tam_vetor = 1000;
+        break;
+    case 2:
+        tam_vetor = 10000;
+        break;
+    case 3:
+        tam_vetor = 100000;
+        break;
+
+    default:
+        break;
     }
 
     printf("\nEscolha o formato do arranjo de elementos no vetor:\n\n");
@@ -80,13 +81,13 @@ int main(void)
     printf("Formato: ");
     scanf("%d", &padrao_vetor);
 
-    // Determina o vetor específico para casos aleatórios (5 versões disponíveis)
-    if (padrao_vetor == 0)
-    {
-        printf("Informe qual dos vetores aleatorios deve ser ordenado (1..5): ");
-        scanf("%d", &id_vetor_aleatorio);
-        id_vetor_aleatorio--;
-    }
+    // Determina o vetor específico para casos aleatórios (5 versões disponíveis) (descomente para exibir uma em específico)
+    // if (padrao_vetor == 0)
+    // {
+    //     printf("Informe qual dos vetores aleatorios deve ser ordenado (1..5): ");
+    //     scanf("%d", &id_vetor_aleatorio);
+    //     id_vetor_aleatorio--;
+    // }
 
     /*
      * O bloco de código abaixo utiliza um switch para determinar qual algoritmo de ordenação será executado,
@@ -116,6 +117,359 @@ int main(void)
      * - Estruturas condicionais ('if' e 'else if') verificam o padrão do vetor e selecionam a versão apropriada.
      */
 
+    // switch (id_ordenacao)
+    // {
+    // case 0: // BubbleSort
+    //     switch (tam_vetor)
+    //     {
+    //     case 100:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(bubblesort, vetor_100_ordenado, 100);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(bubblesort, vetor_100_inverso, 100);
+    //         else
+    //             executar_ordenacao(bubblesort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+    //         break;
+    //     case 1000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(bubblesort, vetor_1000_ordenado, 1000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(bubblesort, vetor_1000_inverso, 1000);
+    //         else
+    //             executar_ordenacao(bubblesort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+    //         break;
+    //     case 10000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(bubblesort, vetor_10000_ordenado, 10000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(bubblesort, vetor_10000_inverso, 10000);
+    //         else
+    //             executar_ordenacao(bubblesort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+    //         break;
+    //     case 100000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(bubblesort, vetor_100000_ordenado, 100000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(bubblesort, vetor_100000_inverso, 100000);
+    //         else
+    //             executar_ordenacao(bubblesort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+    //         break;
+    //     }
+    //     break;
+
+    // case 1: // SelectionSort
+    //     switch (tam_vetor)
+    //     {
+    //     case 100:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(selection_sort, vetor_100_ordenado, 100);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(selection_sort, vetor_100_inverso, 100);
+    //         else
+    //             executar_ordenacao(selection_sort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+    //         break;
+    //     case 1000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(selection_sort, vetor_1000_ordenado, 1000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(selection_sort, vetor_1000_inverso, 1000);
+    //         else
+    //             executar_ordenacao(selection_sort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+    //         break;
+    //     case 10000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(selection_sort, vetor_10000_ordenado, 10000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(selection_sort, vetor_10000_inverso, 10000);
+    //         else
+    //             executar_ordenacao(selection_sort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+    //         break;
+    //     case 100000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(selection_sort, vetor_100000_ordenado, 100000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(selection_sort, vetor_100000_inverso, 100000);
+    //         else
+    //             executar_ordenacao(selection_sort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+    //         break;
+    //     }
+    //     break;
+
+    // case 2: // InsertionSort
+    //     switch (tam_vetor)
+    //     {
+    //     case 100:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(insertion_sort, vetor_100_ordenado, 100);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(insertion_sort, vetor_100_inverso, 100);
+    //         else
+    //             executar_ordenacao(insertion_sort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+    //         break;
+    //     case 1000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(insertion_sort, vetor_1000_ordenado, 1000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(insertion_sort, vetor_1000_inverso, 1000);
+    //         else
+    //             executar_ordenacao(insertion_sort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+    //         break;
+    //     case 10000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(insertion_sort, vetor_10000_ordenado, 10000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(insertion_sort, vetor_10000_inverso, 10000);
+    //         else
+    //             executar_ordenacao(insertion_sort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+    //         break;
+    //     case 100000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(insertion_sort, vetor_100000_ordenado, 100000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(insertion_sort, vetor_100000_inverso, 100000);
+    //         else
+    //             executar_ordenacao(insertion_sort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+    //         break;
+    //     }
+    //     break;
+
+    // case 3: // ShellSort
+    //     switch (tam_vetor)
+    //     {
+    //     case 100:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(shellsort_wrapper, vetor_100_ordenado, 100);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(shellsort_wrapper, vetor_100_inverso, 100);
+    //         else
+    //             executar_ordenacao(shellsort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+    //         break;
+    //     case 1000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(shellsort_wrapper, vetor_1000_ordenado, 1000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(shellsort_wrapper, vetor_1000_inverso, 1000);
+    //         else
+    //             executar_ordenacao(shellsort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+    //         break;
+    //     case 10000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(shellsort_wrapper, vetor_10000_ordenado, 10000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(shellsort_wrapper, vetor_10000_inverso, 10000);
+    //         else
+    //             executar_ordenacao(shellsort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+    //         break;
+    //     case 100000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(shellsort_wrapper, vetor_100000_ordenado, 100000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(shellsort_wrapper, vetor_100000_inverso, 100000);
+    //         else
+    //             executar_ordenacao(shellsort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+    //         break;
+    //     }
+    //     break;
+
+    // case 4: // QuickSort
+    //     switch (tam_vetor)
+    //     {
+    //     case 100:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(quicksort_wrapper, vetor_100_ordenado, 100);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(quicksort_wrapper, vetor_100_inverso, 100);
+    //         else
+    //             executar_ordenacao(quicksort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+    //         break;
+    //     case 1000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(quicksort_wrapper, vetor_1000_ordenado, 1000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(quicksort_wrapper, vetor_1000_inverso, 1000);
+    //         else
+    //             executar_ordenacao(quicksort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+    //         break;
+    //     case 10000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(quicksort_wrapper, vetor_10000_ordenado, 10000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(quicksort_wrapper, vetor_10000_inverso, 10000);
+    //         else
+    //             executar_ordenacao(quicksort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+    //         break;
+    //     case 100000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(quicksort_wrapper, vetor_100000_ordenado, 100000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(quicksort_wrapper, vetor_100000_inverso, 100000);
+    //         else
+    //             executar_ordenacao(quicksort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+    //         break;
+    //     }
+    //     break;
+
+    // case 5: // HeapSort
+    //     switch (tam_vetor)
+    //     {
+    //     case 100:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(heapsort, vetor_100_ordenado, 100);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(heapsort, vetor_100_inverso, 100);
+    //         else
+    //             executar_ordenacao(heapsort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+    //         break;
+    //     case 1000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(heapsort, vetor_1000_ordenado, 1000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(heapsort, vetor_1000_inverso, 1000);
+    //         else
+    //             executar_ordenacao(heapsort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+    //         break;
+    //     case 10000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(heapsort, vetor_10000_ordenado, 10000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(heapsort, vetor_10000_inverso, 10000);
+    //         else
+    //             executar_ordenacao(heapsort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+    //         break;
+    //     case 100000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(heapsort, vetor_100000_ordenado, 100000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(heapsort, vetor_100000_inverso, 100000);
+    //         else
+    //             executar_ordenacao(heapsort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+    //         break;
+    //     }
+    //     break;
+
+    // case 6: // MergeSort
+    //     switch (tam_vetor)
+    //     {
+    //     case 100:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(mergesort_wrapper, vetor_100_ordenado, 100);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(mergesort_wrapper, vetor_100_inverso, 100);
+    //         else
+    //             executar_ordenacao(mergesort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+    //         break;
+    //     case 1000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(mergesort_wrapper, vetor_1000_ordenado, 1000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(mergesort_wrapper, vetor_1000_inverso, 1000);
+    //         else
+    //             executar_ordenacao(mergesort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+    //         break;
+    //     case 10000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(mergesort_wrapper, vetor_10000_ordenado, 10000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(mergesort_wrapper, vetor_10000_inverso, 10000);
+    //         else
+    //             executar_ordenacao(mergesort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+    //         break;
+    //     case 100000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(mergesort_wrapper, vetor_100000_ordenado, 100000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(mergesort_wrapper, vetor_100000_inverso, 100000);
+    //         else
+    //             executar_ordenacao(mergesort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+    //         break;
+    //     }
+    //     break;
+
+    // case 7: // Contagem de Menores
+    //     switch (tam_vetor)
+    //     {
+    //         switch (tam_vetor)
+    //         {
+    //         case 100:
+    //             if (padrao_vetor == 1)
+    //                 executar_ordenacao(contagem_de_menores, vetor_100_ordenado, 100);
+    //             else if (padrao_vetor == 2)
+    //                 executar_ordenacao(contagem_de_menores, vetor_100_inverso, 100);
+    //             else
+    //                 executar_ordenacao(contagem_de_menores, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+    //             break;
+    //         case 1000:
+    //             if (padrao_vetor == 1)
+    //                 executar_ordenacao(contagem_de_menores, vetor_1000_ordenado, 1000);
+    //             else if (padrao_vetor == 2)
+    //                 executar_ordenacao(contagem_de_menores, vetor_1000_inverso, 1000);
+    //             else
+    //                 executar_ordenacao(contagem_de_menores, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+    //             break;
+    //         case 10000:
+    //             if (padrao_vetor == 1)
+    //                 executar_ordenacao(contagem_de_menores, vetor_10000_ordenado, 10000);
+    //             else if (padrao_vetor == 2)
+    //                 executar_ordenacao(contagem_de_menores, vetor_10000_inverso, 10000);
+    //             else
+    //                 executar_ordenacao(contagem_de_menores, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+    //             break;
+    //         case 100000:
+    //             if (padrao_vetor == 1)
+    //                 executar_ordenacao(contagem_de_menores, vetor_100000_ordenado, 100000);
+    //             else if (padrao_vetor == 2)
+    //                 executar_ordenacao(contagem_de_menores, vetor_100000_inverso, 100000);
+    //             else
+    //                 executar_ordenacao(contagem_de_menores, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+    //             break;
+    //         }
+    //     }
+    //     break;
+
+    // case 8: // RadixSort
+    //     switch (tam_vetor)
+    //     {
+    //     case 100:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(radixsort, vetor_100_ordenado, 100);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(radixsort, vetor_100_inverso, 100);
+    //         else
+    //             executar_ordenacao(radixsort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+    //         break;
+    //     case 1000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(radixsort, vetor_1000_ordenado, 1000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(radixsort, vetor_1000_inverso, 1000);
+    //         else
+    //             executar_ordenacao(radixsort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+    //         break;
+    //     case 10000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(radixsort, vetor_10000_ordenado, 10000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(radixsort, vetor_10000_inverso, 10000);
+    //         else
+    //             executar_ordenacao(radixsort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+    //         break;
+    //     case 100000:
+    //         if (padrao_vetor == 1)
+    //             executar_ordenacao(radixsort, vetor_100000_ordenado, 100000);
+    //         else if (padrao_vetor == 2)
+    //             executar_ordenacao(radixsort, vetor_100000_inverso, 100000);
+    //         else
+    //             executar_ordenacao(radixsort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+    //         break;
+    //     }
+    //     break;
+
+    // default:
+    //     printf("Algoritmo de ordenação não identificado.\n");
+    //     break;
+    // }
+
+    // (para tirar a media dos aleatorios)
     switch (id_ordenacao)
     {
     case 0: // BubbleSort
@@ -127,7 +481,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(bubblesort, vetor_100_inverso, 100);
             else
-                executar_ordenacao(bubblesort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+                executar_ordenacaomedia(bubblesort, vetor_100_aleatorio, 100);
             break;
         case 1000:
             if (padrao_vetor == 1)
@@ -135,7 +489,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(bubblesort, vetor_1000_inverso, 1000);
             else
-                executar_ordenacao(bubblesort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+                executar_ordenacaomedia(bubblesort, vetor_1000_aleatorio, 1000);
             break;
         case 10000:
             if (padrao_vetor == 1)
@@ -143,7 +497,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(bubblesort, vetor_10000_inverso, 10000);
             else
-                executar_ordenacao(bubblesort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+                executar_ordenacaomedia(bubblesort, vetor_10000_aleatorio, 10000);
             break;
         case 100000:
             if (padrao_vetor == 1)
@@ -151,7 +505,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(bubblesort, vetor_100000_inverso, 100000);
             else
-                executar_ordenacao(bubblesort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+                executar_ordenacaomedia(bubblesort, vetor_100000_aleatorio, 100000);
             break;
         }
         break;
@@ -165,7 +519,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(selection_sort, vetor_100_inverso, 100);
             else
-                executar_ordenacao(selection_sort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+                executar_ordenacaomedia(selection_sort, vetor_100_aleatorio, 100);
             break;
         case 1000:
             if (padrao_vetor == 1)
@@ -173,7 +527,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(selection_sort, vetor_1000_inverso, 1000);
             else
-                executar_ordenacao(selection_sort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+                executar_ordenacaomedia(selection_sort, vetor_1000_aleatorio, 1000);
             break;
         case 10000:
             if (padrao_vetor == 1)
@@ -181,7 +535,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(selection_sort, vetor_10000_inverso, 10000);
             else
-                executar_ordenacao(selection_sort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+                executar_ordenacaomedia(selection_sort, vetor_10000_aleatorio, 10000);
             break;
         case 100000:
             if (padrao_vetor == 1)
@@ -189,7 +543,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(selection_sort, vetor_100000_inverso, 100000);
             else
-                executar_ordenacao(selection_sort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+                executar_ordenacaomedia(selection_sort, vetor_100000_aleatorio, 100000);
             break;
         }
         break;
@@ -203,7 +557,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(insertion_sort, vetor_100_inverso, 100);
             else
-                executar_ordenacao(insertion_sort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+                executar_ordenacaomedia(insertion_sort, vetor_100_aleatorio, 100);
             break;
         case 1000:
             if (padrao_vetor == 1)
@@ -211,7 +565,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(insertion_sort, vetor_1000_inverso, 1000);
             else
-                executar_ordenacao(insertion_sort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+                executar_ordenacaomedia(insertion_sort, vetor_1000_aleatorio, 1000);
             break;
         case 10000:
             if (padrao_vetor == 1)
@@ -219,7 +573,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(insertion_sort, vetor_10000_inverso, 10000);
             else
-                executar_ordenacao(insertion_sort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+                executar_ordenacaomedia(insertion_sort, vetor_10000_aleatorio, 10000);
             break;
         case 100000:
             if (padrao_vetor == 1)
@@ -227,7 +581,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(insertion_sort, vetor_100000_inverso, 100000);
             else
-                executar_ordenacao(insertion_sort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+                executar_ordenacaomedia(insertion_sort, vetor_100000_aleatorio, 100000);
             break;
         }
         break;
@@ -241,7 +595,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(shellsort_wrapper, vetor_100_inverso, 100);
             else
-                executar_ordenacao(shellsort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+                executar_ordenacaomedia(shellsort_wrapper, vetor_100_aleatorio, 100);
             break;
         case 1000:
             if (padrao_vetor == 1)
@@ -249,7 +603,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(shellsort_wrapper, vetor_1000_inverso, 1000);
             else
-                executar_ordenacao(shellsort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+                executar_ordenacaomedia(shellsort_wrapper, vetor_1000_aleatorio, 1000);
             break;
         case 10000:
             if (padrao_vetor == 1)
@@ -257,7 +611,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(shellsort_wrapper, vetor_10000_inverso, 10000);
             else
-                executar_ordenacao(shellsort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+                executar_ordenacaomedia(shellsort_wrapper, vetor_10000_aleatorio, 10000);
             break;
         case 100000:
             if (padrao_vetor == 1)
@@ -265,7 +619,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(shellsort_wrapper, vetor_100000_inverso, 100000);
             else
-                executar_ordenacao(shellsort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+                executar_ordenacaomedia(shellsort_wrapper, vetor_100000_aleatorio, 100000);
             break;
         }
         break;
@@ -279,7 +633,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(quicksort_wrapper, vetor_100_inverso, 100);
             else
-                executar_ordenacao(quicksort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+                executar_ordenacaomedia(quicksort_wrapper, vetor_100_aleatorio, 100);
             break;
         case 1000:
             if (padrao_vetor == 1)
@@ -287,7 +641,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(quicksort_wrapper, vetor_1000_inverso, 1000);
             else
-                executar_ordenacao(quicksort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+                executar_ordenacaomedia(quicksort_wrapper, vetor_1000_aleatorio, 1000);
             break;
         case 10000:
             if (padrao_vetor == 1)
@@ -295,7 +649,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(quicksort_wrapper, vetor_10000_inverso, 10000);
             else
-                executar_ordenacao(quicksort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+                executar_ordenacaomedia(quicksort_wrapper, vetor_10000_aleatorio, 10000);
             break;
         case 100000:
             if (padrao_vetor == 1)
@@ -303,7 +657,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(quicksort_wrapper, vetor_100000_inverso, 100000);
             else
-                executar_ordenacao(quicksort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+                executar_ordenacaomedia(quicksort_wrapper, vetor_100000_aleatorio, 100000);
             break;
         }
         break;
@@ -317,7 +671,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(heapsort, vetor_100_inverso, 100);
             else
-                executar_ordenacao(heapsort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+                executar_ordenacaomedia(heapsort, vetor_100_aleatorio, 100);
             break;
         case 1000:
             if (padrao_vetor == 1)
@@ -325,7 +679,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(heapsort, vetor_1000_inverso, 1000);
             else
-                executar_ordenacao(heapsort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+                executar_ordenacaomedia(heapsort, vetor_1000_aleatorio, 1000);
             break;
         case 10000:
             if (padrao_vetor == 1)
@@ -333,7 +687,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(heapsort, vetor_10000_inverso, 10000);
             else
-                executar_ordenacao(heapsort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+                executar_ordenacaomedia(heapsort, vetor_10000_aleatorio, 10000);
             break;
         case 100000:
             if (padrao_vetor == 1)
@@ -341,7 +695,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(heapsort, vetor_100000_inverso, 100000);
             else
-                executar_ordenacao(heapsort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+                executar_ordenacaomedia(heapsort, vetor_100000_aleatorio, 100000);
             break;
         }
         break;
@@ -355,7 +709,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(mergesort_wrapper, vetor_100_inverso, 100);
             else
-                executar_ordenacao(mergesort_wrapper, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+                executar_ordenacaomedia(mergesort_wrapper, vetor_100_aleatorio, 100);
             break;
         case 1000:
             if (padrao_vetor == 1)
@@ -363,7 +717,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(mergesort_wrapper, vetor_1000_inverso, 1000);
             else
-                executar_ordenacao(mergesort_wrapper, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+                executar_ordenacaomedia(mergesort_wrapper, vetor_1000_aleatorio, 1000);
             break;
         case 10000:
             if (padrao_vetor == 1)
@@ -371,7 +725,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(mergesort_wrapper, vetor_10000_inverso, 10000);
             else
-                executar_ordenacao(mergesort_wrapper, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+                executar_ordenacaomedia(mergesort_wrapper, vetor_10000_aleatorio, 10000);
             break;
         case 100000:
             if (padrao_vetor == 1)
@@ -379,7 +733,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(mergesort_wrapper, vetor_100000_inverso, 100000);
             else
-                executar_ordenacao(mergesort_wrapper, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+                executar_ordenacaomedia(mergesort_wrapper, vetor_100000_aleatorio, 100000);
             break;
         }
         break;
@@ -395,7 +749,7 @@ int main(void)
                 else if (padrao_vetor == 2)
                     executar_ordenacao(contagem_de_menores, vetor_100_inverso, 100);
                 else
-                    executar_ordenacao(contagem_de_menores, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+                    executar_ordenacaomedia(contagem_de_menores, vetor_100_aleatorio, 100);
                 break;
             case 1000:
                 if (padrao_vetor == 1)
@@ -403,7 +757,7 @@ int main(void)
                 else if (padrao_vetor == 2)
                     executar_ordenacao(contagem_de_menores, vetor_1000_inverso, 1000);
                 else
-                    executar_ordenacao(contagem_de_menores, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+                    executar_ordenacaomedia(contagem_de_menores, vetor_1000_aleatorio, 1000);
                 break;
             case 10000:
                 if (padrao_vetor == 1)
@@ -411,7 +765,7 @@ int main(void)
                 else if (padrao_vetor == 2)
                     executar_ordenacao(contagem_de_menores, vetor_10000_inverso, 10000);
                 else
-                    executar_ordenacao(contagem_de_menores, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+                    executar_ordenacaomedia(contagem_de_menores, vetor_10000_aleatorio, 10000);
                 break;
             case 100000:
                 if (padrao_vetor == 1)
@@ -419,7 +773,7 @@ int main(void)
                 else if (padrao_vetor == 2)
                     executar_ordenacao(contagem_de_menores, vetor_100000_inverso, 100000);
                 else
-                    executar_ordenacao(contagem_de_menores, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+                    executar_ordenacaomedia(contagem_de_menores, vetor_100000_aleatorio, 100000);
                 break;
             }
         }
@@ -434,7 +788,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(radixsort, vetor_100_inverso, 100);
             else
-                executar_ordenacao(radixsort, vetor_100_aleatorio[id_vetor_aleatorio], 100);
+                executar_ordenacaomedia(radixsort, vetor_100_aleatorio, 100);
             break;
         case 1000:
             if (padrao_vetor == 1)
@@ -442,7 +796,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(radixsort, vetor_1000_inverso, 1000);
             else
-                executar_ordenacao(radixsort, vetor_1000_aleatorio[id_vetor_aleatorio], 1000);
+                executar_ordenacaomedia(radixsort, vetor_1000_aleatorio, 1000);
             break;
         case 10000:
             if (padrao_vetor == 1)
@@ -450,7 +804,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(radixsort, vetor_10000_inverso, 10000);
             else
-                executar_ordenacao(radixsort, vetor_10000_aleatorio[id_vetor_aleatorio], 10000);
+                executar_ordenacaomedia(radixsort, vetor_10000_aleatorio, 10000);
             break;
         case 100000:
             if (padrao_vetor == 1)
@@ -458,7 +812,7 @@ int main(void)
             else if (padrao_vetor == 2)
                 executar_ordenacao(radixsort, vetor_100000_inverso, 100000);
             else
-                executar_ordenacao(radixsort, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
+                executar_ordenacaomedia(radixsort, vetor_100000_aleatorio, 100000);
             break;
         }
         break;
@@ -473,11 +827,11 @@ int main(void)
 
 void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho)
 {
-    printf("\n\nVetor original:\n");
-    for (int i = 0; i < tamanho; i++)
-    {
-        printf("%d ", vetor[i]);
-    }
+    // printf("\n\nVetor original:\n");
+    // for (int i = 0; i < tamanho; i++)
+    // {
+    //     printf("%d ", vetor[i]);
+    // }
 
     clock_t inicio, fim;
     double tempo_ordenacao;
@@ -491,11 +845,11 @@ void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho)
     // Finaliza a contagem de tempo
     fim = clock();
 
-    printf("\nVetor ordenado:\n");
-    for (int i = 0; i < tamanho; i++)
-    {
-        printf("%d ", vetor[i]);
-    }
+    // printf("\nVetor ordenado:\n");
+    // for (int i = 0; i < tamanho; i++)
+    // {
+    //     printf("%d ", vetor[i]);
+    // }
 
     // Calcula o tempo de execução em segundos
     tempo_ordenacao = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
@@ -507,6 +861,44 @@ void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho)
 
     // Libera a memória alocada para os dados de eficiência
     free(eficiencia);
+}
+
+void executar_ordenacaomedia(AlgOrdenacao alg_ordenacao, int **vetor, int tamanho)
+{
+    clock_t inicio, fim;
+    double tempo_ordenacao;
+
+    int *somaeficiencia = (int *)calloc(2, sizeof(int));
+    double somatempo = 0;
+
+    for (int i = 0; i < 5; i++)
+    {
+        // Inicia a contagem de tempo
+        inicio = clock();
+
+        // Executa o algoritmo de ordenação e captura os dados de eficiência
+        int *aux = alg_ordenacao(vetor[i], tamanho);
+
+        somaeficiencia[0] += aux[0];
+        somaeficiencia[1] += aux[1];
+
+        // Finaliza a contagem de tempo
+        fim = clock();
+
+        // Calcula o tempo de execução em segundos
+        somatempo += ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+    }
+
+    double tempomedio = somatempo / 5;
+    int comparacaomedia = somaeficiencia[0] / 5;
+    int movimentacaomedia = somaeficiencia[1] / 5;
+
+    // Imprime os resultados
+    printf("\n\nTempo de ordenacao (media): %.6f segundos\n", tempomedio);
+    printf("Comparacoes realizadas (media): %d\n", comparacaomedia);
+    printf("Movimentacoes realizadas (media): %d\n", movimentacaomedia);
+
+    free(somaeficiencia);
 }
 
 int *quicksort_wrapper(int *vetor, int tamanho)
@@ -703,7 +1095,7 @@ int *quicksort(int v[], int inf, int sup)
         }
         else if ((b > a) ^ (b > c))
         {
-            eficiencia[0]++; 
+            eficiencia[0]++;
             pivoIndex = meio; // Elemento central é o pivô
         }
         else
@@ -786,7 +1178,8 @@ int *quicksort(int v[], int inf, int sup)
 /*
  * Rearranja um heap para manter a propriedade de heap (pai maior que os filhos).
  */
-int *rearranjar_heap(int v[], int i, int tamanho_do_heap) {
+int *rearranjar_heap(int v[], int i, int tamanho_do_heap)
+{
     // Aloca e inicializa o vetor de eficiência
     // eficiencia[0] -> número de comparações realizadas
     // eficiencia[1] -> número de movimentações realizadas
@@ -801,21 +1194,26 @@ int *rearranjar_heap(int v[], int i, int tamanho_do_heap) {
     int aux;
 
     // Verifica se o filho esquerdo existe e é maior que o pai
-    if ((esq < tamanho_do_heap) && (v[esq] > v[i])) {
+    if ((esq < tamanho_do_heap) && (v[esq] > v[i]))
+    {
         eficiencia[0]++; // Incrementa a contagem de comparações
         maior = esq;     // Atualiza o índice do maior elemento
-    } else {
+    }
+    else
+    {
         eficiencia[0]++; // Mesmo se a condição for falsa, a comparação foi feita
     }
 
     // Verifica se o filho direito existe e é maior que o maior encontrado até agora
-    if ((dir < tamanho_do_heap) && (v[dir] > v[maior])) {
+    if ((dir < tamanho_do_heap) && (v[dir] > v[maior]))
+    {
         eficiencia[0]++; // Incrementa a contagem de comparações
         maior = dir;     // Atualiza o índice do maior elemento
     }
 
     // Se o maior não for o nó atual, realiza a troca
-    if (maior != i) {
+    if (maior != i)
+    {
         eficiencia[1]++; // Incrementa a contagem de movimentações
 
         // Troca os elementos entre o nó atual e o maior filho
@@ -825,11 +1223,12 @@ int *rearranjar_heap(int v[], int i, int tamanho_do_heap) {
 
         // Chamada recursiva para ajustar o sub-heap afetado
         int *eficiencia_recursiva = rearranjar_heap(v, maior, tamanho_do_heap);
-        if (eficiencia_recursiva) {
+        if (eficiencia_recursiva)
+        {
             // Soma os valores de eficiência da recursão
             eficiencia[0] += eficiencia_recursiva[0]; // Comparações
             eficiencia[1] += eficiencia_recursiva[1]; // Movimentações
-            free(eficiencia_recursiva);              // Libera memória da chamada recursiva
+            free(eficiencia_recursiva);               // Libera memória da chamada recursiva
         }
     }
 
@@ -853,7 +1252,8 @@ void construir_heap(int v[], int n)
  * Utiliza a estrutura de heap para ordenar os elementos, extrair o maior e reconstruir o heap.
  * Complexidade: O(n log n).
  */
-int *heapsort(int v[], int n) {
+int *heapsort(int v[], int n)
+{
     // Aloca e inicializa o vetor de eficiência
     // eficiencia[0] -> número de comparações realizadas
     // eficiencia[1] -> número de movimentações realizadas
@@ -865,16 +1265,18 @@ int *heapsort(int v[], int n) {
     construir_heap(v, n); // O vetor é reorganizado para obedecer às propriedades de um heap
 
     // Etapa 2: Realiza o processo de ordenação extraindo os elementos do heap
-    for (int i = n - 1; i > 0; i--) {
+    for (int i = n - 1; i > 0; i--)
+    {
         // Troca o maior elemento (no topo do heap) com o último elemento
         int aux = v[0];
         v[0] = v[i];
-        v[i] = aux; // O maior elemento é movido para a posição final do subarray ordenado
+        v[i] = aux;      // O maior elemento é movido para a posição final do subarray ordenado
         eficiencia[1]++; // Incrementa a contagem de movimentações
 
         // Ajusta o heap para manter as propriedades do heap máximo
         int *auxiliar = rearranjar_heap(v, 0, i); // Reorganiza o heap excluindo o último elemento
-        if (auxiliar) {
+        if (auxiliar)
+        {
             // Soma as eficiências retornadas pela função `rearranjar_heap`
             eficiencia[0] += auxiliar[0]; // Comparações
             eficiencia[1] += auxiliar[1]; // Movimentações
@@ -889,7 +1291,8 @@ int *heapsort(int v[], int n) {
 /*
  * Merge Sort: divide o array em duas partes, ordena-as e as combina.
  */
-int *merge(int v[], int inf, int meio, int sup) {
+int *merge(int v[], int inf, int meio, int sup)
+{
     // Aloca e inicializa o vetor de eficiência
     // eficiencia[0] -> número de comparações realizadas
     // eficiencia[1] -> número de movimentações realizadas
@@ -902,7 +1305,8 @@ int *merge(int v[], int inf, int meio, int sup) {
 
     // Aloca o array auxiliar para armazenar os elementos temporariamente
     int *aux = (int *)malloc(tamanho * sizeof(int));
-    if (!aux) {
+    if (!aux)
+    {
         free(eficiencia); // Libera a memória de eficiência em caso de falha
         return NULL;
     }
@@ -911,33 +1315,40 @@ int *merge(int v[], int inf, int meio, int sup) {
     int i = inf, j = meio + 1, k = 0;
 
     // Combina os dois subarrays ordenados no array auxiliar
-    while (i <= meio && j <= sup) {
+    while (i <= meio && j <= sup)
+    {
         eficiencia[0]++; // Incrementa a contagem de comparações
 
         // Verifica qual elemento é menor e insere no array auxiliar
-        if (v[i] <= v[j]) {
+        if (v[i] <= v[j])
+        {
             aux[k++] = v[i++]; // Elemento do primeiro subarray
             eficiencia[1]++;   // Incrementa a contagem de movimentações
-        } else {
+        }
+        else
+        {
             aux[k++] = v[j++]; // Elemento do segundo subarray
             eficiencia[1]++;   // Incrementa a contagem de movimentações
         }
     }
 
     // Copia os elementos restantes do primeiro subarray (se houver)
-    while (i <= meio) {
+    while (i <= meio)
+    {
         aux[k++] = v[i++];
         eficiencia[1]++; // Incrementa a contagem de movimentações
     }
 
     // Copia os elementos restantes do segundo subarray (se houver)
-    while (j <= sup) {
+    while (j <= sup)
+    {
         aux[k++] = v[j++];
         eficiencia[1]++; // Incrementa a contagem de movimentações
     }
 
     // Copia os elementos do array auxiliar de volta para o array original
-    for (i = inf, k = 0; i <= sup; i++, k++) {
+    for (i = inf, k = 0; i <= sup; i++, k++)
+    {
         v[i] = aux[k];
         eficiencia[1]++; // Incrementa a contagem de movimentações
     }
@@ -1019,7 +1430,7 @@ int *contagem_de_menores(int v[], int n)
         return NULL; // Retorna NULL caso a alocação falhe
 
     // Aloca os vetores auxiliares X e B
-    int *X = (int *)calloc(n, sizeof(int)); // Vetor X para contar quantos elementos são menores que cada elemento
+    int *X = (int *)calloc(n, sizeof(int));  // Vetor X para contar quantos elementos são menores que cada elemento
     int *B = (int *)malloc(n * sizeof(int)); // Vetor B para armazenar o vetor ordenado
     if (!X || !B)
     {
@@ -1055,14 +1466,14 @@ int *contagem_de_menores(int v[], int n)
     // Reposiciona os elementos no vetor B com base na contagem de menores
     for (int i = 0; i < n; i++)
     {
-        B[X[i]] = v[i]; // Coloca v[i] na posição correta no vetor B
+        B[X[i]] = v[i];  // Coloca v[i] na posição correta no vetor B
         eficiencia[1]++; // Incrementa o contador de movimentações
     }
 
     // Copia os elementos ordenados de volta para o vetor original
     for (int i = 0; i < n; i++)
     {
-        v[i] = B[i]; // Copia de B para v
+        v[i] = B[i];     // Copia de B para v
         eficiencia[1]++; // Incrementa o contador de movimentações
     }
 
@@ -1084,7 +1495,7 @@ int obter_maior(int v[], int n, int *eficiencia)
     // Percorre o vetor para encontrar o maior valor
     for (int i = 1; i < n; i++)
     {
-        eficiencia[0]++; // Incrementa o contador de comparações
+        eficiencia[0]++;  // Incrementa o contador de comparações
         if (v[i] > maior) // Compara o elemento atual com o maior encontrado até o momento
         {
             maior = v[i]; // Atualiza o maior valor
@@ -1100,22 +1511,22 @@ int obter_maior(int v[], int n, int *eficiencia)
 int *contar_classificar(int v[], int n, int exp)
 {
     int *eficiencia = (int *)calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
-    int aux[n]; // Array auxiliar para armazenar a ordenação temporária
-    int contagem[10] = {0}; // Array para contar a frequência de cada dígito (0 a 9)
+    int aux[n];                                      // Array auxiliar para armazenar a ordenação temporária
+    int contagem[10] = {0};                          // Array para contar a frequência de cada dígito (0 a 9)
 
     // Conta a frequência de cada dígito (unidade, dezena, etc.)
     for (int i = 0; i < n; i++)
     {
         int digito = (v[i] / exp) % 10; // Obtém o dígito correspondente à posição "exp"
-        contagem[digito]++; // Incrementa o contador para o dígito encontrado
-        eficiencia[1]++; // Incrementa o contador de movimentações
+        contagem[digito]++;             // Incrementa o contador para o dígito encontrado
+        eficiencia[1]++;                // Incrementa o contador de movimentações
     }
 
     // Atualiza a contagem para determinar a posição dos elementos no vetor
     for (int i = 1; i < 10; i++)
     {
         contagem[i] += contagem[i - 1]; // Soma as frequências anteriores para determinar a posição acumulada
-        eficiencia[1]++; // Incrementa o contador de movimentações
+        eficiencia[1]++;                // Incrementa o contador de movimentações
     }
 
     // Coloca os elementos ordenados no array auxiliar
@@ -1123,13 +1534,13 @@ int *contar_classificar(int v[], int n, int exp)
     {
         int digito = (v[i] / exp) % 10; // Obtém o dígito correspondente à posição "exp"
         aux[--contagem[digito]] = v[i]; // Coloca o elemento na posição correta do vetor auxiliar
-        eficiencia[1]++; // Incrementa o contador de movimentações
+        eficiencia[1]++;                // Incrementa o contador de movimentações
     }
 
     // Copia os elementos do array auxiliar de volta para o array original
     for (int i = 0; i < n; i++)
     {
-        v[i] = aux[i]; // Copia de volta os elementos ordenados
+        v[i] = aux[i];   // Copia de volta os elementos ordenados
         eficiencia[1]++; // Incrementa o contador de movimentações
     }
 
@@ -1153,13 +1564,13 @@ int *radixsort(int v[], int n)
     {
         // Chama a função contar_classificar para ordenar com base no dígito "exp"
         int *aux_eficiencia = contar_classificar(v, n, exp);
-        
+
         // Acumula as comparações e movimentações realizadas
         eficiencia[0] += aux_eficiencia[0]; // Soma as comparações
         eficiencia[1] += aux_eficiencia[1]; // Soma as movimentações
-        
+
         // Libera a memória alocada para eficiência da função contar_classificar
-        free(aux_eficiencia); 
+        free(aux_eficiencia);
     }
 
     return eficiencia; // Retorna o vetor de eficiência (comparações e movimentações)
