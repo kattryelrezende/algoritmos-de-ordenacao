@@ -518,7 +518,7 @@ int* mergesort_wrapper(int *vetor, int tamanho)
 int* bubblesort(int v[], int n) {
     // Declaração de variáveis
     int i, j, aux;
-    int *eficiencia = (int *) calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+    int *eficiencia = (int *) calloc(2, sizeof(int));   // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
     // Laço externo que controla as iterações do algoritmo
     // Representa a quantidade de passagens pelo vetor
@@ -645,7 +645,7 @@ int* shellsort(int v[], int n, int incrementos[], int numinc) {
  */
 int *quicksort(int v[], int inf, int sup)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int)); // Aloca e inicializa eficiência
+    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
     if (inf < sup)
     {
@@ -803,7 +803,7 @@ void construir_heap(int v[], int n)
  */
 int *heapsort(int v[], int n)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int));
+    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
     construir_heap(v, n); // Constrói o heap máximo
     for (int i = n - 1; i > 0; i--)
@@ -894,7 +894,7 @@ int *merge(int v[], int inf, int meio, int sup)
  */
 int *mergesort(int v[], int inf, int sup)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int));
+    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
     if (inf < sup)
     {
@@ -938,7 +938,7 @@ int *mergesort(int v[], int inf, int sup)
  */
 int *contagem_de_menores(int v[], int n)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int));
+    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
     // Aloca os vetores auxiliares dinamicamente
     int *X = (int *)calloc(n, sizeof(int));
@@ -1014,7 +1014,7 @@ int obter_maior(int v[], int n, int *eficiencia)
  */
 int *contar_classificar(int v[], int n, int exp)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int)); // eficiencia[0] -> comparações e eficiencia[1] -> movimentações
+    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações e eficiencia[1] -> movimentações
     int aux[n];
     int contagem[10] = {0};
 
@@ -1058,7 +1058,7 @@ int *contar_classificar(int v[], int n, int exp)
  */
 int *radixsort(int v[], int n)
 {
-    int *eficiencia = (int *)calloc(2, sizeof(int));
+    int *eficiencia = (int *)calloc(2, sizeof(int));    // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
 
     int maior = obter_maior(v, n, eficiencia);
 
