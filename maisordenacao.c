@@ -23,10 +23,10 @@ int obter_maior(int v[], int n, int* eficiencia);
 int* contar_classificar(int v[], int n, int exp);
 
 // Declaração dos algoritmos de ordenação implementados
-void bubblesort(int v[], int n);
-void selection_sort(int num[], int tam);
-void insertion_sort(int v[], int n);
-void shellsort(int v[], int n, int incrementos[], int numinc);
+int *bubblesort(int v[], int n);
+int *selection_sort(int num[], int tam);
+int *insertion_sort(int v[], int n);
+int *shellsort(int v[], int n, int incrementos[], int numinc);
 int *quicksort(int v[], int inf, int sup);
 int *heapsort(int v[], int n);
 int *mergesort(int v[], int inf, int sup);
@@ -507,22 +507,30 @@ void mergesort_wrapper(int *vetor, int tamanho)
  * Compara e troca elementos adjacentes até que o array esteja ordenado.
  * Complexidade: O(n^2). Simples e intuitivo, mas ineficiente para grandes conjuntos.
  */
-void bubblesort(int v[], int n)
-{
+int* bubblesort(int v[], int n) {
+    // Declaração de variáveis
     int i, j, aux;
-    for (i = 0; i < n; i++)
-    {
-        for (j = 0; j < n - 1; j++)
-        {
-            // Troca pares adjacentes fora de ordem
-            if (v[j] > v[j + 1])
-            {
+    int *eficiencia = (int *) calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+
+    // Laço externo que controla as iterações do algoritmo
+    // Representa a quantidade de passagens pelo vetor
+    for (i = 0; i < n; i++) {
+        // Laço interno que compara pares adjacentes
+        // A cada iteração, "empurra" o maior elemento restante para o final
+        for (j = 0; j < n - 1; j++) {
+            // Verifica se os elementos adjacentes estão fora de ordem
+            eficiencia[0]++; 
+            if (v[j] > v[j + 1]) {
+                // Realiza a troca dos elementos
                 aux = v[j];
                 v[j] = v[j + 1];
                 v[j + 1] = aux;
+                eficiencia[1]++;
             }
         }
     }
+
+    return eficiencia;
 }
 
 /*
@@ -530,25 +538,33 @@ void bubblesort(int v[], int n)
  * Seleciona o menor elemento a cada iteração e o coloca na posição correta.
  * Complexidade: O(n^2). Ideal para aprendizado, mas ineficiente para grandes conjuntos.
  */
-void selection_sort(int num[], int tam)
-{
+int* selection_sort(int num[], int tam) {
+    // Declaração de variáveis
     int i, j, min;
-    for (i = 0; i < (tam - 1); i++)
-    {
+
+    int *eficiencia = (int *) calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+
+    // Laço externo que percorre o vetor até o penúltimo elemento
+    for (i = 0; i < (tam - 1); i++) {
+        // Assume que o menor elemento está na posição atual (i)
         min = i;
-        for (j = (i + 1); j < tam; j++)
-        {
-            if (num[j] < num[min])
-            {
-                min = j;
+
+        // Laço interno para encontrar o menor elemento no subvetor restante
+        for (j = (i + 1); j < tam; j++) {
+            // Verifica se o elemento atual (num[j]) é menor que o mínimo encontrado
+            eficiencia[0]++;
+            if (num[j] < num[min]) {
+                min = j; // Atualiza o índice do menor elemento
             }
         }
-        // Troca apenas se o índice atual não for o do menor
-        if (i != min)
-        {
-            int swap = num[i];
-            num[i] = num[min];
-            num[min] = swap;
+
+        // Troca os elementos apenas se o menor encontrado não for o próprio elemento atual
+        eficiencia[0]++;
+        if (i != min) {
+            int swap = num[i];    // Salva o valor atual em uma variável auxiliar
+            num[i] = num[min];    // Coloca o menor valor na posição atual
+            num[min] = swap;      // Coloca o valor original da posição atual na posição do menor
+            eficiencia[1]++;
         }
     }
 }
@@ -558,18 +574,26 @@ void selection_sort(int num[], int tam)
  * Insere elementos em suas posições corretas à medida que o array é percorrido.
  * Complexidade: O(n^2), mas eficiente para listas pequenas ou quase ordenadas.
  */
-void insertion_sort(int v[], int n)
-{
+int* insertion_sort(int v[], int n) {
+    // Declaração de variáveis
     int i, j, elem;
-    for (i = 1; i < n; i++)
-    {
+    int *eficiencia = (int *) calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+
+    // Laço externo: percorre os elementos do vetor a partir do segundo elemento (índice 1)
+    for (i = 1; i < n; i++) {
+        // Armazena o elemento atual que será inserido na posição correta
         elem = v[i];
-        // Move os elementos maiores para abrir espaço
-        for (j = i - 1; j >= 0 && elem < v[j]; j--)
-        {
-            v[j + 1] = v[j];
+
+        // Laço interno: desloca os elementos maiores que "elem" para frente
+        for (j = i - 1; j >= 0 && elem < v[j]; j--) {
+            eficiencia[0]++;
+            v[j + 1] = v[j]; // Move o elemento maior uma posição à frente
+            eficiencia[1]++;
         }
-        v[j + 1] = elem; // Insere o elemento na posição correta
+
+        // Insere o elemento armazenado na posição correta
+        v[j + 1] = elem;
+        eficiencia[1]++;
     }
 }
 
@@ -578,20 +602,30 @@ void insertion_sort(int v[], int n)
  * Utiliza incrementos (gaps) para melhorar a eficiência do Insertion Sort.
  * Complexidade: Depende dos gaps utilizados, mas geralmente O(n^1.5) em média.
  */
-void shellsort(int v[], int n, int incrementos[], int numinc)
-{
+int* shellsort(int v[], int n, int incrementos[], int numinc) {
+    // Declaração de variáveis
     int incr, i, j, h, aux;
-    for (incr = 0; incr < numinc; incr++)
-    {
-        h = incrementos[incr]; // Gap atual
-        for (i = h; i < n; i++)
-        {
-            aux = v[i];
-            for (j = i - h; j >= 0 && v[j] > aux; j -= h)
-            {
-                v[j + h] = v[j]; // Move elementos dentro do gap
+    int *eficiencia = (int *) calloc(2, sizeof(int)); // eficiencia[0] -> comparações; eficiencia[1] -> movimentações
+
+    // Laço para iterar sobre os diferentes valores de "gap" (incremento) fornecidos
+    for (incr = 0; incr < numinc; incr++) {
+        h = incrementos[incr];  // Atualiza o valor do "gap" (distância de comparação entre elementos)
+
+        // Laço principal para percorrer os elementos do vetor, começando pelo índice 'h'
+        for (i = h; i < n; i++) {
+            aux = v[i];  // Armazena o valor atual que será inserido na posição correta
+
+            // Laço interno: compara o elemento atual com o anterior dentro do gap
+            // Desloca os elementos maiores que "aux" para abrir espaço
+            for (j = i - h; j >= 0 && v[j] > aux; j -= h) {
+                eficiencia[0]++;
+                v[j + h] = v[j];  // Move o elemento para frente dentro do gap
+                eficiencia[1]++;
             }
-            v[j + h] = aux; // Insere o elemento
+
+            // Insere o elemento armazenado no lugar correto
+            v[j + h] = aux;
+            eficiencia[1]++;
         }
     }
 }
