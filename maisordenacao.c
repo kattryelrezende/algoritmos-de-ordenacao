@@ -52,9 +52,28 @@ int main(void)
     scanf("%d", &id_ordenacao);
 
     printf("\nIndique o numero de elementos no vetor:\n");
-    printf("100: 100 elementos \n1000: 1.000 elementos \n10000: 10.000 elementos \n100000: 100.000 elementos\n\n");
+    printf("0: 100 elementos \n1: 1.000 elementos \n2: 10.000 elementos \n3: 100.000 elementos\n\n");
     printf("Tamanho: ");
     scanf("%d", &tam_vetor);
+
+    switch (tam_vetor)
+    {
+        case 0:
+            tam_vetor = 100;
+            break;
+        case 1:
+            tam_vetor = 1000;
+            break;
+        case 2:
+            tam_vetor = 10000;
+            break;
+        case 3:
+            tam_vetor = 100000;
+            break;
+        
+        default:
+            break;
+    }
 
     printf("\nEscolha o formato do arranjo de elementos no vetor:\n\n");
     printf("0: Aleatorios \n1: Ordenados \n2: Inversamente Ordenados\n\n");
