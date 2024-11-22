@@ -9,13 +9,13 @@
 #include "vetores.h"
 
 // Protótipo da função de ordenação, permitindo passar diferentes algoritmos como parâmetro
-typedef void (*AlgOrdenacao)(int *, int);
+typedef int* (*AlgOrdenacao)(int *, int);
 
 // Funções auxiliares para execução de algoritmos específicos
 void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho);
-void quicksort_wrapper(int *vetor, int tamanho);
-void shellsort_wrapper(int *vetor, int tamanho);
-void mergesort_wrapper(int *vetor, int tamanho);
+int* quicksort_wrapper(int *vetor, int tamanho);
+int* shellsort_wrapper(int *vetor, int tamanho);
+int* mergesort_wrapper(int *vetor, int tamanho);
 int *rearranjar_heap(int v[], int i, int tamanho_do_heap);
 void construir_heap(int v[], int n);
 int *merge(int v[], int inf, int meio, int sup);
@@ -466,8 +466,8 @@ void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho)
     // Inicia a contagem de tempo
     inicio = clock();
 
-    // Executa o algoritmo de ordenação
-    alg_ordenacao(vetor, tamanho);
+    // Executa o algoritmo de ordenação e captura os dados de eficiência
+    int *eficiencia = alg_ordenacao(vetor, tamanho);
 
     // Finaliza a contagem de tempo
     fim = clock();
@@ -481,25 +481,33 @@ void executar_ordenacao(AlgOrdenacao alg_ordenacao, int *vetor, int tamanho)
     // Calcula o tempo de execução em segundos
     tempo_ordenacao = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
 
-    // Imprime o resultado
+    // Imprime os resultados
     printf("\n\nTempo de ordenacao: %.6f segundos\n", tempo_ordenacao);
+    printf("Comparacoes realizadas: %d\n", eficiencia[0]);
+    printf("Movimentacoes realizadas: %d\n", eficiencia[1]);
+
+    // Libera a memória alocada para os dados de eficiência
+    free(eficiencia);
 }
 
-void quicksort_wrapper(int *vetor, int tamanho)
+int* quicksort_wrapper(int *vetor, int tamanho)
 {
-    quicksort(vetor, 0, tamanho - 1); // Chama o QuickSort com índices
+    int* eficiencia = quicksort(vetor, 0, tamanho - 1); // Chama o QuickSort com índices
+    return eficiencia;
 }
 
-void shellsort_wrapper(int *vetor, int tamanho)
+int* shellsort_wrapper(int *vetor, int tamanho)
 {
     int incrementos[] = {121, 40, 13, 4, 1}; // Sequência de Knuth
     int num_incrementos = sizeof(incrementos) / sizeof(incrementos[0]);
-    shellsort(vetor, tamanho, incrementos, num_incrementos);
+    int* eficiencia = shellsort(vetor, tamanho, incrementos, num_incrementos);
+    return eficiencia;
 }
 
-void mergesort_wrapper(int *vetor, int tamanho)
+int* mergesort_wrapper(int *vetor, int tamanho)
 {
-    mergesort(vetor, 0, tamanho - 1); // Chama o MergeSort com índices
+    int* eficiencia = mergesort(vetor, 0, tamanho - 1); // Chama o MergeSort com índices
+    return eficiencia;
 }
 
 /*
