@@ -386,8 +386,6 @@ int main(void)
 
     case 7: // Contagem de Menores
         switch (tam_vetor)
-        {
-            switch (tam_vetor)
             {
             case 100:
                 if (padrao_vetor == 1)
@@ -421,7 +419,6 @@ int main(void)
                 else
                     executar_ordenacao(contagem_de_menores, vetor_100000_aleatorio[id_vetor_aleatorio], 100000);
                 break;
-            }
         }
         break;
 
